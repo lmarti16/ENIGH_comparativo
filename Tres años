@@ -203,63 +203,130 @@ prom_trabajo_total20 <- sum(BD20$factor * BD20$trabajo) / tot_hogares20
 prom_negocio_total20 <- sum(BD20$factor * BD20$negocio) / tot_hogares20
 prom_otrab_total20 <- sum(BD20$factor * BD20$otros_trab) / tot_hogares20
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+prom_ingtrab_total18 <- sum(BD18$factor * BD18$ingtrab) / tot_hogares18
+prom_rentas_total18 <- sum(BD18$factor * BD18$rentas) / tot_hogares18
+prom_transfer_total18 <- sum(BD18$factor * BD18$transfer) / tot_hogares18
+prom_estim_alqu_total18 <- sum(BD18$factor * BD18$estim_alqu) / tot_hogares18
+prom_otros_ing_total18 <- sum(BD18$factor * BD18$otros_ing) / tot_hogares18
+prom_trabajo_total18 <- sum(BD18$factor * BD18$trabajo) / tot_hogares18
+prom_negocio_total18 <- sum(BD18$factor * BD18$negocio) / tot_hogares18
+prom_otrab_total18 <- sum(BD18$factor * BD18$otros_trab) / tot_hogares18
 
 # Calculamos el promedio de ingreso corriente para cada entidad
-prom_ing_cor_entidades <- tapply(BD1$factor * BD1$ing_cor, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_ing_cor_entidades22 <- tapply(BD22$factor * BD22$ing_cor, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_ing_cor_entidades20 <- tapply(BD20$factor * BD20$ing_cor, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_ing_cor_entidades18 <- tapply(BD18$factor * BD18$ing_cor, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
 
 # Calculamos el promedio de ingreso por componente para cada entidad
-prom_ingtrab_entidades <- tapply(BD1$factor * BD1$ingtrab, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_rentas_entidades <- tapply(BD1$factor * BD1$rentas, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_transfer_entidades <- tapply(BD1$factor * BD1$transfer, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_estim_alqu_entidades <- tapply(BD1$factor * BD1$estim_alqu, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_otros_ing_entidades <- tapply(BD1$factor * BD1$otros_ing, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_trabajo_ing_entidades <- tapply(BD1$factor * BD1$trabajo, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_negocio_ing_entidades <- tapply(BD1$factor * BD1$negocio, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
-prom_otrab_ing_entidades <- tapply(BD1$factor * BD1$otros_trab, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_ingtrab_entidades22 <- tapply(BD22$factor * BD22$ingtrab, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_rentas_entidades22 <- tapply(BD22$factor * BD22$rentas, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_transfer_entidades22 <- tapply(BD22$factor * BD22$transfer, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_estim_alqu_entidades22 <- tapply(BD22$factor * BD22$estim_alqu, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_otros_ing_entidades22 <- tapply(BD22$factor * BD22$otros_ing, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_trabajo_ing_entidades22 <- tapply(BD22$factor * BD22$trabajo, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_negocio_ing_entidades22 <- tapply(BD22$factor * BD22$negocio, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
+prom_otrab_ing_entidades22 <- tapply(BD22$factor * BD22$otros_trab, BD22$NOMBRE, sum) / tapply(BD22$factor, BD22$NOMBRE, sum)
 
+prom_ingtrab_entidades20 <- tapply(BD20$factor * BD20$ingtrab, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_rentas_entidades20 <- tapply(BD20$factor * BD20$rentas, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_transfer_entidades20 <- tapply(BD20$factor * BD20$transfer, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_estim_alqu_entidades20 <- tapply(BD20$factor * BD20$estim_alqu, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_otros_ing_entidades20 <- tapply(BD20$factor * BD20$otros_ing, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_trabajo_ing_entidades20 <- tapply(BD20$factor * BD20$trabajo, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_negocio_ing_entidades20 <- tapply(BD20$factor * BD20$negocio, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+prom_otrab_ing_entidades20 <- tapply(BD20$factor * BD20$otros_trab, BD20$NOMBRE, sum) / tapply(BD20$factor, BD20$NOMBRE, sum)
+
+prom_ingtrab_entidades18 <- tapply(BD18$factor * BD18$ingtrab, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_rentas_entidades18 <- tapply(BD18$factor * BD18$rentas, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_transfer_entidades18 <- tapply(BD18$factor * BD18$transfer, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_estim_alqu_entidades18 <- tapply(BD18$factor * BD18$estim_alqu, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_otros_ing_entidades18 <- tapply(BD18$factor * BD18$otros_ing, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_trabajo_ing_entidades18 <- tapply(BD18$factor * BD18$trabajo, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_negocio_ing_entidades18 <- tapply(BD18$factor * BD18$negocio, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
+prom_otrab_ing_entidades18 <- tapply(BD18$factor * BD18$otros_trab, BD18$NOMBRE, sum) / tapply(BD18$factor, BD18$NOMBRE, sum)
 
 # Guardamos los resultados en un data frame
-promedios_nacional <- data.frame(
-    NOMBRE = "Total",
-    PROM_ING_COR = prom_ing_cor_total,
-    PROM_ING_TRAB = prom_ingtrab_total,
-    PROM_RENTAS = prom_rentas_total,
-    PROM_TRANSFER = prom_transfer_total,
-    PROM_ESTIM_ALQU = prom_estim_alqu_total,
-    PROM_OTROS_ING = prom_otros_ing_total,
-    PROM_TRABAJO_ING = prom_trabajo_total,
-    PROM_NEGOCIO_ING = prom_negocio_total,
-    PROM_OTRAB_ING = prom_otrab_total
+promedios_nacional22 <- data.frame(
+    NOMBRE22 = "Total",
+    PROM_ING_COR22 = prom_ing_cor_total22,
+    PROM_ING_TRAB22 = prom_ingtrab_total22,
+    PROM_RENTAS22 = prom_rentas_total22,
+    PROM_TRANSFER22 = prom_transfer_total22,
+    PROM_ESTIM_ALQU22 = prom_estim_alqu_total22,
+    PROM_OTROS_ING22 = prom_otros_ing_total22,
+    PROM_TRABAJO_ING22 = prom_trabajo_total22,
+    PROM_NEGOCIO_ING22 = prom_negocio_total22,
+    PROM_OTRAB_ING22 = prom_otrab_total22
 )
 
-promedios_por_entidad <- data.frame(
-    NOMBRE = nombres,
-    PROM_ING_COR = prom_ing_cor_entidades,
-    PROM_ING_TRAB = prom_ingtrab_entidades,
-    PROM_RENTAS = prom_rentas_entidades,
-    PROM_TRANSFER = prom_transfer_entidades,
-    PROM_ESTIM_ALQU = prom_estim_alqu_entidades,
-    PROM_OTROS_ING = prom_otros_ing_entidades,
-    PROM_TRABAJO_ING = prom_trabajo_ing_entidades,
-    PROM_NEGOCIO_ING = prom_negocio_ing_entidades,
-    PROM_OTRAB_ING = prom_otrab_ing_entidades
+promedios_por_entidad22 <- data.frame(
+    NOMBRE22 = nombres,
+    PROM_ING_COR22 = prom_ing_cor_entidades22,
+    PROM_ING_TRAB22 = prom_ingtrab_entidades22,
+    PROM_RENTAS22 = prom_rentas_entidades22,
+    PROM_TRANSFER22 = prom_transfer_entidades22,
+    PROM_ESTIM_ALQU22 = prom_estim_alqu_entidades22,
+    PROM_OTROS_ING22 = prom_otros_ing_entidades22,
+    PROM_TRABAJO_ING22 = prom_trabajo_ing_entidades22,
+    PROM_NEGOCIO_ING22 = prom_negocio_ing_entidades22,
+    PROM_OTRAB_ING22 = prom_otrab_ing_entidades22
+)
+
+promedios_nacional20 <- data.frame(
+    NOMBRE20 = "Total",
+    PROM_ING_COR20 = prom_ing_cor_total20,
+    PROM_ING_TRAB20 = prom_ingtrab_total20,
+    PROM_RENTAS20 = prom_rentas_total20,
+    PROM_TRANSFER20 = prom_transfer_total20,
+    PROM_ESTIM_ALQU20 = prom_estim_alqu_total20,
+    PROM_OTROS_ING20 = prom_otros_ing_total20,
+    PROM_TRABAJO_ING20 = prom_trabajo_total20,
+    PROM_NEGOCIO_ING20 = prom_negocio_total20,
+    PROM_OTRAB_ING20 = prom_otrab_total20
+)
+
+promedios_por_entidad20 <- data.frame(
+    NOMBRE20 = nombres,
+    PROM_ING_COR20 = prom_ing_cor_entidades20,
+    PROM_ING_TRAB20 = prom_ingtrab_entidades20,
+    PROM_RENTAS20 = prom_rentas_entidades20,
+    PROM_TRANSFER20 = prom_transfer_entidades20,
+    PROM_ESTIM_ALQU20 = prom_estim_alqu_entidades20,
+    PROM_OTROS_ING20 = prom_otros_ing_entidades20,
+    PROM_TRABAJO_ING20 = prom_trabajo_ing_entidades20,
+    PROM_NEGOCIO_ING20 = prom_negocio_ing_entidades20,
+    PROM_OTRAB_ING20 = prom_otrab_ing_entidades20
+)
+promedios_nacional18 <- data.frame(
+    NOMBRE18 = "Total",
+    PROM_ING_COR18 = prom_ing_cor_total18,
+    PROM_ING_TRAB18 = prom_ingtrab_total18,
+    PROM_RENTAS18 = prom_rentas_total18,
+    PROM_TRANSFER18 = prom_transfer_total18,
+    PROM_ESTIM_ALQU18 = prom_estim_alqu_total18,
+    PROM_OTROS_ING18 = prom_otros_ing_total18,
+    PROM_TRABAJO_ING18 = prom_trabajo_total18,
+    PROM_NEGOCIO_ING18 = prom_negocio_total18,
+    PROM_OTRAB_ING18 = prom_otrab_total18
+)
+
+promedios_por_entidad18 <- data.frame(
+    NOMBRE18 = nombres,
+    PROM_ING_COR18 = prom_ing_cor_entidades18,
+    PROM_ING_TRAB18 = prom_ingtrab_entidades18,
+    PROM_RENTAS18 = prom_rentas_entidades18,
+    PROM_TRANSFER18 = prom_transfer_entidades18,
+    PROM_ESTIM_ALQU18 = prom_estim_alqu_entidades18,
+    PROM_OTROS_ING18 = prom_otros_ing_entidades18,
+    PROM_TRABAJO_ING18 = prom_trabajo_ing_entidades18,
+    PROM_NEGOCIO_ING18 = prom_negocio_ing_entidades18,
+    PROM_OTRAB_ING18 = prom_otrab_ing_entidades18
 )
 
 # Creamos una nueva columna para el decil de cada hogar
-BD1$DECIL <- cut(BD1$ACUMULA2, breaks = quantile(BD1$ACUMULA2, probs = seq(0, 1, by = 0.1)), labels = FALSE)
+BD22$DECIL <- cut(BD22$ACUMULA2, breaks = quantile(BD22$ACUMULA2, probs = seq(0, 1, by = 0.1)), labels = FALSE)
+BD20$DECIL <- cut(BD20$ACUMULA2, breaks = quantile(BD20$ACUMULA2, probs = seq(0, 1, by = 0.1)), labels = FALSE)
+BD18$DECIL <- cut(BD18$ACUMULA2, breaks = quantile(BD18$ACUMULA2, probs = seq(0, 1, by = 0.1)), labels = FALSE)
 
 # Función para calcular el promedio por decil y entidad
 calcular_promedio_por_decil <- function(data, variable) {
@@ -269,32 +336,76 @@ calcular_promedio_por_decil <- function(data, variable) {
     return(as.data.frame(promedios_decil))
 }
 
+
+
 # Calcular los promedios por decil para cada variable de interés
-promedios_ing_cor_decil <- calcular_promedio_por_decil(BD1, "ing_cor")
-promedios_ing_trab_decil <- calcular_promedio_por_decil(BD1, "ingtrab")
-promedios_rentas_decil <- calcular_promedio_por_decil(BD1, "rentas")
-promedios_transfer_decil <- calcular_promedio_por_decil(BD1, "transfer")
-promedios_estim_alqu_decil <- calcular_promedio_por_decil(BD1, "estim_alqu")
-promedios_otros_ing_decil <- calcular_promedio_por_decil(BD1, "otros_ing")
-promedios_trabajo_ing_decil <- calcular_promedio_por_decil(BD1, "trabajo")
-promedios_negocio_ing_decil <- calcular_promedio_por_decil(BD1, "negocio")
-promedios_otrab_ing_decil <- calcular_promedio_por_decil(BD1, "otros_trab")
+promedios_ing_cor_decil22 <- calcular_promedio_por_decil(BD22, "ing_cor")
+promedios_ing_trab_decil22 <- calcular_promedio_por_decil(BD22, "ingtrab")
+promedios_rentas_decil22 <- calcular_promedio_por_decil(BD22, "rentas")
+promedios_transfer_decil22 <- calcular_promedio_por_decil(BD22, "transfer")
+promedios_estim_alqu_decil22 <- calcular_promedio_por_decil(BD22, "estim_alqu")
+promedios_otros_ing_decil22 <- calcular_promedio_por_decil(BD22, "otros_ing")
+promedios_trabajo_ing_decil22 <- calcular_promedio_por_decil(BD22, "trabajo")
+promedios_negocio_ing_decil22 <- calcular_promedio_por_decil(BD22, "negocio")
+promedios_otrab_ing_decil22 <- calcular_promedio_por_decil(BD22, "otros_trab")
 
+promedios_ing_cor_decil20 <- calcular_promedio_por_decil(BD20, "ing_cor")
+promedios_ing_trab_decil20 <- calcular_promedio_por_decil(BD20, "ingtrab")
+promedios_rentas_decil20 <- calcular_promedio_por_decil(BD20, "rentas")
+promedios_transfer_decil20 <- calcular_promedio_por_decil(BD20, "transfer")
+promedios_estim_alqu_decil20 <- calcular_promedio_por_decil(BD20, "estim_alqu")
+promedios_otros_ing_decil20 <- calcular_promedio_por_decil(BD20, "otros_ing")
+promedios_trabajo_ing_decil20 <- calcular_promedio_por_decil(BD20, "trabajo")
+promedios_negocio_ing_decil20 <- calcular_promedio_por_decil(BD20, "negocio")
+promedios_otrab_ing_decil20 <- calcular_promedio_por_decil(BD20, "otros_trab")
 
-# Cambiar los nombres de las columnas para que indiquen el decil
-colnames(promedios_ing_cor_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_ing_trab_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_rentas_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_transfer_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_estim_alqu_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_otros_ing_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_trabajo_ing_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_negocio_ing_decil) <- paste("DECIL", 1:10, sep = "_")
-colnames(promedios_otrab_ing_decil) <- paste("DECIL", 1:10, sep = "_")
+# Calcular los promedios por decil para cada variable de interés
+promedios_ing_cor_decil18 <- calcular_promedio_por_decil(BD18, "ing_cor")
+promedios_ing_trab_decil18 <- calcular_promedio_por_decil(BD18, "ingtrab")
+promedios_rentas_decil18 <- calcular_promedio_por_decil(BD18, "rentas")
+promedios_transfer_decil18 <- calcular_promedio_por_decil(BD18, "transfer")
+promedios_estim_alqu_decil18 <- calcular_promedio_por_decil(BD18, "estim_alqu")
+promedios_otros_ing_decil18 <- calcular_promedio_por_decil(BD18, "otros_ing")
+promedios_trabajo_ing_decil18 <- calcular_promedio_por_decil(BD18, "trabajo")
+promedios_negocio_ing_decil18 <- calcular_promedio_por_decil(BD18, "negocio")
+promedios_otrab_ing_decil18 <- calcular_promedio_por_decil(BD18, "otros_trab")
+
+# Cambiar los nombres de las columnas para que indiquen el decil22
+colnames(promedios_ing_cor_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_ing_trab_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_rentas_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_transfer_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_estim_alqu_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otros_ing_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_trabajo_ing_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_negocio_ing_decil22) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otrab_ing_decil22) <- paste("DECIL", 1:10, sep = "_")
+
+colnames(promedios_ing_cor_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_ing_trab_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_rentas_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_transfer_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_estim_alqu_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otros_ing_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_trabajo_ing_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_negocio_ing_decil20) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otrab_ing_decil20) <- paste("DECIL", 1:10, sep = "_")
+
+colnames(promedios_ing_cor_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_ing_trab_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_rentas_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_transfer_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_estim_alqu_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otros_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_trabajo_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_negocio_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otrab_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
 
 
 # Unir los promedios por decil para cada variable
-promedios_por_entidad_decil <- cbind(promedios_por_entidad, promedios_ing_cor_decil, promedios_ing_trab_decil, promedios_rentas_decil, promedios_transfer_decil,promedios_estim_alqu_decil, promedios_otros_ing_decil,promedios_trabajo_ing_decil,promedios_negocio_ing_decil,promedios_otrab_ing_decil)
+promedios_por_entidad_decil22 <- cbind(promedios_por_entidad22, promedios_ing_cor_decil22, promedios_ing_trab_decil22, promedios_rentas_decil22, promedios_transfer_decil22,promedios_estim_alqu_decil22, promedios_otros_ing_decil22,promedios_trabajo_ing_decil22,promedios_negocio_ing_decil22,promedios_otrab_ing_decil22)
+promedios_por_entidad_decil20 <- cbind(promedios_por_entidad20, promedios_ing_cor_decil20, promedios_ing_trab_decil20, promedios_rentas_decil20, promedios_transfer_decil20,promedios_estim_alqu_decil20, promedios_otros_ing_decil20,promedios_trabajo_ing_decil20,promedios_negocio_ing_decil20,promedios_otrab_ing_decil20)
+promedios_por_entidad_decil18 <- cbind(promedios_por_entidad18, promedios_ing_cor_decil18, promedios_ing_trab_decil18, promedios_rentas_decil18, promedios_transfer_decil18,promedios_estim_alqu_decil18, promedios_otros_ing_decil18,promedios_trabajo_ing_decil18,promedios_negocio_ing_decil18,promedios_otrab_ing_decil18)
 
 # Función para calcular los promedios por decil para cada variable adicional
 calcular_promedios_por_variable_adicional_decil <- function(data, variable_adicional) {
@@ -304,25 +415,73 @@ calcular_promedios_por_variable_adicional_decil <- function(data, variable_adici
 }
 
 # Calcular los promedios por decil para cada variable adicional
-promedios_jubilacion_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "jubilacion")
-promedios_becas_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "becas")
-promedios_donativos_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "donativos")
-promedios_remesas_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "remesas")
-promedios_bene_gob_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "bene_gob")
-promedios_transf_hog_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "transf_hog")
-promedios_trans_inst_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "trans_inst")
+promedios_jubilacion_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "jubilacion")
+promedios_becas_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "becas")
+promedios_donativos_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "donativos")
+promedios_remesas_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "remesas")
+promedios_bene_gob_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "bene_gob")
+promedios_transf_hog_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "transf_hog")
+promedios_trans_inst_decil22 <- calcular_promedios_por_variable_adicional_decil(BD22, "trans_inst")
+
+promedios_jubilacion_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "jubilacion")
+promedios_becas_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "becas")
+promedios_donativos_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "donativos")
+promedios_remesas_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "remesas")
+promedios_bene_gob_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "bene_gob")
+promedios_transf_hog_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "transf_hog")
+promedios_trans_inst_decil20 <- calcular_promedios_por_variable_adicional_decil(BD20, "trans_inst")
+
+promedios_jubilacion_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "jubilacion")
+promedios_becas_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "becas")
+promedios_donativos_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "donativos")
+promedios_remesas_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "remesas")
+promedios_bene_gob_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "bene_gob")
+promedios_transf_hog_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "transf_hog")
+promedios_trans_inst_decil18 <- calcular_promedios_por_variable_adicional_decil(BD18, "trans_inst")
 
 # Unir los promedios por decil para cada variable adicional
-promedios_por_entidad_decil <- cbind(
-    promedios_por_entidad_decil,
-    promedios_jubilacion_decil,
-    promedios_becas_decil,
-    promedios_donativos_decil,
-    promedios_remesas_decil,
-    promedios_bene_gob_decil,
-    promedios_transf_hog_decil,
-    promedios_trans_inst_decil
+promedios_por_entidad_decil22 <- cbind(
+    promedios_por_entidad_decil22,
+    promedios_jubilacion_decil22,
+    promedios_becas_decil22,
+    promedios_donativos_decil22,
+    promedios_remesas_decil22,
+    promedios_bene_gob_decil22,
+    promedios_transf_hog_decil22,
+    promedios_trans_inst_decil22
 )
+
+promedios_por_entidad_decil20 <- cbind(
+    promedios_por_entidad_decil20,
+    promedios_jubilacion_decil20,
+    promedios_becas_decil20,
+    promedios_donativos_decil20,
+    promedios_remesas_decil20,
+    promedios_bene_gob_decil20,
+    promedios_transf_hog_decil20,
+    promedios_trans_inst_decil20
+)
+
+# Unir los promedios por decil para cada variable adicional
+promedios_por_entidad_decil18 <- cbind(
+    promedios_por_entidad_decil18,
+    promedios_jubilacion_decil18,
+    promedios_becas_decil18,
+    promedios_donativos_decil18,
+    promedios_remesas_decil18,
+    promedios_bene_gob_decil18,
+    promedios_transf_hog_decil18,
+    promedios_trans_inst_decil18
+)
+
+
+
+
+
+
+
+
+
 
 # Filtrar por generación
 promedios_por_entidad_decil_Baby_Boomers <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Baby Boomers", ]
