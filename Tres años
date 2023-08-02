@@ -257,80 +257,80 @@ prom_otrab_ing_entidades18 <- tapply(BD18$factor * BD18$otros_trab, BD18$NOMBRE,
 
 # Guardamos los resultados en un data frame
 promedios_nacional22 <- data.frame(
-    NOMBRE22 = "Total",
-    PROM_ING_COR22 = prom_ing_cor_total22,
-    PROM_ING_TRAB22 = prom_ingtrab_total22,
-    PROM_RENTAS22 = prom_rentas_total22,
-    PROM_TRANSFER22 = prom_transfer_total22,
-    PROM_ESTIM_ALQU22 = prom_estim_alqu_total22,
-    PROM_OTROS_ING22 = prom_otros_ing_total22,
-    PROM_TRABAJO_ING22 = prom_trabajo_total22,
-    PROM_NEGOCIO_ING22 = prom_negocio_total22,
-    PROM_OTRAB_ING22 = prom_otrab_total22
+    NOMBRE = "Total",
+    PROM_ING_COR = prom_ing_cor_total22,
+    PROM_ING_TRAB = prom_ingtrab_total22,
+    PROM_RENTAS = prom_rentas_total22,
+    PROM_TRANSFER = prom_transfer_total22,
+    PROM_ESTIM_ALQU = prom_estim_alqu_total22,
+    PROM_OTROS_ING = prom_otros_ing_total22,
+    PROM_TRABAJO_ING = prom_trabajo_total22,
+    PROM_NEGOCIO_ING = prom_negocio_total22,
+    PROM_OTRAB_ING = prom_otrab_total22
 )
 
 promedios_por_entidad22 <- data.frame(
-    NOMBRE22 = nombres,
-    PROM_ING_COR22 = prom_ing_cor_entidades22,
-    PROM_ING_TRAB22 = prom_ingtrab_entidades22,
-    PROM_RENTAS22 = prom_rentas_entidades22,
-    PROM_TRANSFER22 = prom_transfer_entidades22,
-    PROM_ESTIM_ALQU22 = prom_estim_alqu_entidades22,
-    PROM_OTROS_ING22 = prom_otros_ing_entidades22,
-    PROM_TRABAJO_ING22 = prom_trabajo_ing_entidades22,
-    PROM_NEGOCIO_ING22 = prom_negocio_ing_entidades22,
-    PROM_OTRAB_ING22 = prom_otrab_ing_entidades22
+    NOMBRE = nombres,
+    PROM_ING_COR = prom_ing_cor_entidades22,
+    PROM_ING_TRAB = prom_ingtrab_entidades22,
+    PROM_RENTAS = prom_rentas_entidades22,
+    PROM_TRANSFER = prom_transfer_entidades22,
+    PROM_ESTIM_ALQU = prom_estim_alqu_entidades22,
+    PROM_OTROS_ING = prom_otros_ing_entidades22,
+    PROM_TRABAJO_ING = prom_trabajo_ing_entidades22,
+    PROM_NEGOCIO_ING = prom_negocio_ing_entidades22,
+    PROM_OTRAB_ING = prom_otrab_ing_entidades22
 )
 
 promedios_nacional20 <- data.frame(
-    NOMBRE20 = "Total",
-    PROM_ING_COR20 = prom_ing_cor_total20,
-    PROM_ING_TRAB20 = prom_ingtrab_total20,
-    PROM_RENTAS20 = prom_rentas_total20,
-    PROM_TRANSFER20 = prom_transfer_total20,
-    PROM_ESTIM_ALQU20 = prom_estim_alqu_total20,
-    PROM_OTROS_ING20 = prom_otros_ing_total20,
-    PROM_TRABAJO_ING20 = prom_trabajo_total20,
-    PROM_NEGOCIO_ING20 = prom_negocio_total20,
-    PROM_OTRAB_ING20 = prom_otrab_total20
+    NOMBRE = "Total",
+    PROM_ING_COR = prom_ing_cor_total20,
+    PROM_ING_TRAB = prom_ingtrab_total20,
+    PROM_RENTAS = prom_rentas_total20,
+    PROM_TRANSFER = prom_transfer_total20,
+    PROM_ESTIM_ALQU = prom_estim_alqu_total20,
+    PROM_OTROS_ING = prom_otros_ing_total20,
+    PROM_TRABAJO_ING = prom_trabajo_total20,
+    PROM_NEGOCIO_ING = prom_negocio_total20,
+    PROM_OTRAB_ING = prom_otrab_total20
 )
 
 promedios_por_entidad20 <- data.frame(
-    NOMBRE20 = nombres,
-    PROM_ING_COR20 = prom_ing_cor_entidades20,
-    PROM_ING_TRAB20 = prom_ingtrab_entidades20,
-    PROM_RENTAS20 = prom_rentas_entidades20,
-    PROM_TRANSFER20 = prom_transfer_entidades20,
-    PROM_ESTIM_ALQU20 = prom_estim_alqu_entidades20,
-    PROM_OTROS_ING20 = prom_otros_ing_entidades20,
-    PROM_TRABAJO_ING20 = prom_trabajo_ing_entidades20,
-    PROM_NEGOCIO_ING20 = prom_negocio_ing_entidades20,
-    PROM_OTRAB_ING20 = prom_otrab_ing_entidades20
+    NOMBRE = nombres,
+    PROM_ING_COR = prom_ing_cor_entidades20,
+    PROM_ING_TRAB = prom_ingtrab_entidades20,
+    PROM_RENTAS = prom_rentas_entidades20,
+    PROM_TRANSFER = prom_transfer_entidades20,
+    PROM_ESTIM_ALQU = prom_estim_alqu_entidades20,
+    PROM_OTROS_ING = prom_otros_ing_entidades20,
+    PROM_TRABAJO_ING = prom_trabajo_ing_entidades20,
+    PROM_NEGOCIO_ING = prom_negocio_ing_entidades20,
+    PROM_OTRAB_ING = prom_otrab_ing_entidades20
 )
 promedios_nacional18 <- data.frame(
-    NOMBRE18 = "Total",
-    PROM_ING_COR18 = prom_ing_cor_total18,
-    PROM_ING_TRAB18 = prom_ingtrab_total18,
-    PROM_RENTAS18 = prom_rentas_total18,
-    PROM_TRANSFER18 = prom_transfer_total18,
-    PROM_ESTIM_ALQU18 = prom_estim_alqu_total18,
-    PROM_OTROS_ING18 = prom_otros_ing_total18,
-    PROM_TRABAJO_ING18 = prom_trabajo_total18,
-    PROM_NEGOCIO_ING18 = prom_negocio_total18,
-    PROM_OTRAB_ING18 = prom_otrab_total18
+    NOMBRE = "Total",
+    PROM_ING_COR = prom_ing_cor_total18,
+    PROM_ING_TRAB = prom_ingtrab_total18,
+    PROM_RENTAS = prom_rentas_total18,
+    PROM_TRANSFER = prom_transfer_total18,
+    PROM_ESTIM_ALQU = prom_estim_alqu_total18,
+    PROM_OTROS_ING = prom_otros_ing_total18,
+    PROM_TRABAJO_ING = prom_trabajo_total18,
+    PROM_NEGOCIO_ING = prom_negocio_total18,
+    PROM_OTRAB_ING = prom_otrab_total18
 )
 
 promedios_por_entidad18 <- data.frame(
-    NOMBRE18 = nombres,
-    PROM_ING_COR18 = prom_ing_cor_entidades18,
-    PROM_ING_TRAB18 = prom_ingtrab_entidades18,
-    PROM_RENTAS18 = prom_rentas_entidades18,
-    PROM_TRANSFER18 = prom_transfer_entidades18,
-    PROM_ESTIM_ALQU18 = prom_estim_alqu_entidades18,
-    PROM_OTROS_ING18 = prom_otros_ing_entidades18,
-    PROM_TRABAJO_ING18 = prom_trabajo_ing_entidades18,
-    PROM_NEGOCIO_ING18 = prom_negocio_ing_entidades18,
-    PROM_OTRAB_ING18 = prom_otrab_ing_entidades18
+    NOMBRE = nombres,
+    PROM_ING_COR = prom_ing_cor_entidades18,
+    PROM_ING_TRAB = prom_ingtrab_entidades18,
+    PROM_RENTAS = prom_rentas_entidades18,
+    PROM_TRANSFER = prom_transfer_entidades18,
+    PROM_ESTIM_ALQU = prom_estim_alqu_entidades18,
+    PROM_OTROS_ING = prom_otros_ing_entidades18,
+    PROM_TRABAJO_ING = prom_trabajo_ing_entidades18,
+    PROM_NEGOCIO_ING = prom_negocio_ing_entidades18,
+    PROM_OTRAB_ING = prom_otrab_ing_entidades18
 )
 
 # Creamos una nueva columna para el decil de cada hogar
