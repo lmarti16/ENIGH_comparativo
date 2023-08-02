@@ -1,0 +1,392 @@
+# Cargamos las bibliotecas necesarias
+library(foreign)
+library(doBy)
+library(reldist)
+library(survey)
+library(sf)
+library(ggspatial)
+library(tidyverse)
+library(RColorBrewer)
+library(cowplot)
+
+# Establecemos la ruta del archivo CSV
+ruta_archivo22 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_22.csv"
+ruta_archivo20 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_20.csv"
+ruta_archivo18 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_18.csv"
+
+# Cargamos el archivo CSV en el dataframe Conc
+Conc22 <- read.csv(ruta_archivo22)
+Conc20 <- read.csv(ruta_archivo20)
+Conc18 <- read.csv(ruta_archivo18)
+
+# Eliminamos las comas de la columna ubica_geo
+Conc22$ubica_geo <- gsub(",", "", Conc22$ubica_geo)
+Conc20$ubica_geo <- gsub(",", "", Conc20$ubica_geo)
+Conc18$ubica_geo <- gsub(",", "", Conc18$ubica_geo)
+
+# Creamos una función que devuelva el primer o los dos primeros dígitos de un número
+extraer_digitos <- function(x) {
+    if (nchar(x) == 4) {
+        return(substr(x, 1, 1))
+    } else if (nchar(x) == 5) {
+        return(substr(x, 1, 2))
+    } else {
+        return(NA)
+    }
+}
+
+# Aplicamos la función a la columna ubica_geo y creamos una nueva columna con el resultado
+Conc22$entidad <- sapply(Conc22$ubica_geo, extraer_digitos)
+Conc20$entidad <- sapply(Conc20$ubica_geo, extraer_digitos)
+Conc18$entidad <- sapply(Conc18$ubica_geo, extraer_digitos)
+
+# Definimos los nombres de las entidades federativas
+nombres <- c("AGUASCALIENTES", "BAJA CALIFORNIA", "BAJA CALIFORNIA SUR", "CAMPECHE", "COAHUILA", "COLIMA", "CHIAPAS", "CHIHUAHUA", "CIUDAD DE MEXICO", "DURANGO", "GUANAJUATO", "GUERRERO", "HIDALGO", "JALISCO", "MEXICO", "MICHOACAN", "MORELOS", "NAYARIT", "NUEVO LEON", "OAXACA", "PUEBLA", "QUERETARO", "QUINTANA ROO", "SAN LUIS POTOSI", "SINALOA", "SONORA", "TABASCO", "TAMAULIPAS", "TLAXCALA", "VERACRUZ", "YUCATAN", "ZACATECAS")
+
+# Creamos una nueva columna llamada NOMBRE con los nombres de las entidades usando mutate y factor
+Conc22 <- Conc22 %>%
+    mutate(NOMBRE = factor(entidad, levels = 1:32, labels = nombres))
+Conc20 <- Conc20 %>%
+    mutate(NOMBRE = factor(entidad, levels = 1:32, labels = nombres))
+Conc18 <- Conc18 %>%
+    mutate(NOMBRE = factor(entidad, levels = 1:32, labels = nombres))
+
+# Definir los rangos de edad por generación
+babyboomers <- 58:76 # nacidos entre 1946 y 1964
+generacionx <- 42:57 # nacidos entre 1965 y 1980
+millennials <- 26:41 # nacidos entre 1981 y 1996
+generacionz <- 10:25 # nacidos entre 1997 y 2012
+
+# Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
+Conc22$generacion <- NA # inicializamos la variable con valores faltantes
+Conc22$generacion[Conc22$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc22$generacion[Conc22$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
+Conc22$generacion[Conc22$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
+Conc22$generacion[Conc22$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+
+Conc20$generacion <- NA # inicializamos la variable con valores faltantes
+Conc20$generacion[Conc20$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc20$generacion[Conc20$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
+Conc20$generacion[Conc20$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
+Conc20$generacion[Conc20$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+
+Conc18$generacion <- NA # inicializamos la variable con valores faltantes
+Conc18$generacion[Conc18$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc18$generacion[Conc18$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
+Conc18$generacion[Conc18$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
+Conc18$generacion[Conc18$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+
+# Seleccionamos las variables de interés, incluyendo las nuevas variables
+Conc22 <- Conc22[c("foliohog", "ing_cor", "factor", "ingtrab", "trabajo", "negocio",
+"otros_trab" ,"rentas", "transfer", "estim_alqu", "otros_ing", "jubilacion", "becas", "donativos", "remesas", "bene_gob", "transf_hog", "trans_inst","generacion", "NOMBRE")]
+
+Conc20 <- Conc20[c("foliohog", "ing_cor", "factor", "ingtrab", "trabajo", "negocio",
+"otros_trab" ,"rentas", "transfer", "estim_alqu", "otros_ing", "jubilacion", "becas", "donativos", "remesas", "bene_gob", "transf_hog", "trans_inst","generacion", "NOMBRE")]
+
+Conc18 <- Conc18[c("foliohog", "ing_cor", "factor", "ingtrab", "trabajo", "negocio",
+"otros_trab" ,"rentas", "transfer", "estim_alqu", "otros_ing", "jubilacion", "becas", "donativos", "remesas", "bene_gob", "transf_hog", "trans_inst","generacion", "NOMBRE")]
+
+# Ordenamos Conc de acuerdo a ing_cor, foliohog
+Conc22 <- orderBy(~ +ing_cor + foliohog, data = Conc22)
+Conc20 <- orderBy(~ +ing_cor + foliohog, data = Conc20)
+Conc18 <- orderBy(~ +ing_cor + foliohog, data = Conc18)
+
+# Sumamos todos los factores y guardamos el valor en el vector tot_hogares
+tot_hogares22 <- sum(Conc22$factor)
+tot_hogares20 <- sum(Conc20$factor)
+tot_hogares18 <- sum(Conc18$factor)
+
+# Dividimos la suma de factores entre diez para obtener el tamaño del decil
+tam_dec22 <- trunc(tot_hogares22 / 10)
+tam_dec20 <- trunc(tot_hogares20 / 10)
+tam_dec18 <- trunc(tot_hogares18 / 10)
+
+# Mostramos la suma del factor en variable hogar
+Conc22$tam_dec22 <- tam_dec22
+Conc20$tam_dec20 <- tam_dec20
+Conc18$tam_dec18 <- tam_dec18
+
+# Creamos deciles de hogares
+BD22 <- Conc22
+BD22$MAXT <- BD22$ing_cor
+BD22 <- BD22[with(BD22, order(rank(MAXT))),]
+BD22$ACUMULA <- cumsum(BD22$factor)
+for (i in 1:9) {
+    a22 <- BD22[dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1,]$factor
+    BD22 <- rbind(BD22[1:(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1),],
+                 BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1):dim(BD22)[1],])
+    b22<- tam_dec22 * i - BD22[dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1],]$ACUMULA
+    BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1),]$factor <- b22
+    BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 2),]$factor <- (a22 - b22)
+}
+BD22$ACUMULA2 <- cumsum(BD22$factor)
+BD22$DECIL <- 0
+BD22[(BD22$ACUMULA2 <= tam_dec22),]$DECIL <- 1
+for (i in 1:9) {
+    BD22[((BD22$ACUMULA2 > tam_dec22 * i) & (BD22$ACUMULA2 <= tam_dec22 * (i + 1))),]$DECIL <- (i + 1)
+}
+BD22[BD22$DECIL %in% "0",]$DECIL <- 10
+
+BD20 <- Conc20
+BD20$MAXT <- BD20$ing_cor
+BD20 <- BD20[with(BD20, order(rank(MAXT))),]
+BD20$ACUMULA <- cumsum(BD20$factor)
+for (i in 1:9) {
+    a20 <- BD20[dim(BD20[BD20$ACUMULA < tam_dec20 * i,])[1] + 1,]$factor
+    BD20 <- rbind(BD20[1:(dim(BD20[BD20$ACUMULA < tam_dec20 * i,])[1] + 1),],
+                 BD20[(dim(BD20[BD20$ACUMULA < tam_dec20 * i,])[1] + 1):dim(BD20)[1],])
+    b20 <- tam_dec20 * i - BD20[dim(BD20[BD20$ACUMULA < tam_dec20 * i,])[1],]$ACUMULA
+    BD20[(dim(BD20[BD20$ACUMULA < tam_dec20 * i,])[1] + 1),]$factor <- b20
+    BD20[(dim(BD22[BD20$ACUMULA < tam_dec20 * i,])[1] + 2),]$factor <- (a20 - b20)
+}
+BD20$ACUMULA2 <- cumsum(BD20$factor)
+BD20$DECIL <- 0
+BD20[(BD20$ACUMULA2 <= tam_dec20),]$DECIL <- 1
+for (i in 1:9) {
+    BD20[((BD20$ACUMULA2 > tam_dec20 * i) & (BD20$ACUMULA2 <= tam_dec20 * (i + 1))),]$DECIL <- (i + 1)
+}
+BD20[BD20$DECIL %in% "0",]$DECIL <- 10
+
+
+BD18 <- Conc18
+BD18$MAXT <- BD18$ing_cor
+BD18 <- BD18[with(BD18, order(rank(MAXT))),]
+BD18$ACUMULA <- cumsum(BD18$factor)
+for (i in 1:9) {
+    a18 <- BD18[dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1] + 1,]$factor
+    BD18 <- rbind(BD18[1:(dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1] + 1),],
+                 BD18[(dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1] + 1):dim(BD18)[1],])
+    b18 <- tam_dec18 * i - BD18[dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1],]$ACUMULA
+    BD18[(dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1] + 1),]$factor <- b18
+    BD18[(dim(BD18[BD18$ACUMULA < tam_dec18 * i,])[1] + 2),]$factor <- (a18 - b18)
+}
+BD18$ACUMULA2 <- cumsum(BD18$factor)
+BD18$DECIL <- 0
+BD18[(BD18$ACUMULA2 <= tam_dec18),]$DECIL <- 1
+for (i in 1:9) {
+    BD18[((BD18$ACUMULA2 > tam_dec18 * i) & (BD18$ACUMULA2 <= tam_dec18 * (i + 1))),]$DECIL <- (i + 1)
+}
+BD18[BD18$DECIL %in% "0",]$DECIL <- 10
+
+
+# Total de hogares
+x22 <- tapply(BD22$factor, BD22$foliohog, sum)
+x20 <- tapply(BD20$factor, BD20$foliohog, sum)
+x18 <- tapply(BD18$factor, BD18$foliohog, sum)
+
+# Deciles
+y22 <- tapply(BD22$factor, BD22$DECIL, sum)
+y20 <- tapply(BD20$factor, BD20$DECIL, sum)
+y18 <- tapply(BD18$factor, BD18$DECIL, sum)
+
+# Se calcula el promedio de ingreso corriente para el total
+prom_ing_cor_total22 <- sum(BD22$factor * BD22$ing_cor) / tot_hogares22
+prom_ing_cor_total20 <- sum(BD20$factor * BD20$ing_cor) / tot_hogares20
+prom_ing_cor_total18 <- sum(BD18$factor * BD18$ing_cor) / tot_hogares18
+
+# Se calcula el promedio de ingreso corriente por componente para el total
+prom_ingtrab_total22 <- sum(BD22$factor * BD22$ingtrab) / tot_hogares22
+prom_rentas_total22 <- sum(BD22$factor * BD22$rentas) / tot_hogares22
+prom_transfer_total22 <- sum(BD22$factor * BD22$transfer) / tot_hogares22
+prom_estim_alqu_total22 <- sum(BD22$factor * BD22$estim_alqu) / tot_hogares22
+prom_otros_ing_total22 <- sum(BD22$factor * BD22$otros_ing) / tot_hogares22
+prom_trabajo_total22 <- sum(BD22$factor * BD22$trabajo) / tot_hogares22
+prom_negocio_total22 <- sum(BD22$factor * BD22$negocio) / tot_hogares22
+prom_otrab_total22 <- sum(BD22$factor * BD22$otros_trab) / tot_hogares22
+
+prom_ingtrab_total20 <- sum(BD20$factor * BD20$ingtrab) / tot_hogares20
+prom_rentas_total20 <- sum(BD20$factor * BD20$rentas) / tot_hogares20
+prom_transfer_total20 <- sum(BD20$factor * BD20$transfer) / tot_hogares20
+prom_estim_alqu_total20 <- sum(BD20$factor * BD20$estim_alqu) / tot_hogares20
+prom_otros_ing_total20 <- sum(BD20$factor * BD20$otros_ing) / tot_hogares20
+prom_trabajo_total20 <- sum(BD20$factor * BD20$trabajo) / tot_hogares20
+prom_negocio_total20 <- sum(BD20$factor * BD20$negocio) / tot_hogares20
+prom_otrab_total20 <- sum(BD20$factor * BD20$otros_trab) / tot_hogares20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Calculamos el promedio de ingreso corriente para cada entidad
+prom_ing_cor_entidades <- tapply(BD1$factor * BD1$ing_cor, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+
+# Calculamos el promedio de ingreso por componente para cada entidad
+prom_ingtrab_entidades <- tapply(BD1$factor * BD1$ingtrab, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_rentas_entidades <- tapply(BD1$factor * BD1$rentas, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_transfer_entidades <- tapply(BD1$factor * BD1$transfer, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_estim_alqu_entidades <- tapply(BD1$factor * BD1$estim_alqu, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_otros_ing_entidades <- tapply(BD1$factor * BD1$otros_ing, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_trabajo_ing_entidades <- tapply(BD1$factor * BD1$trabajo, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_negocio_ing_entidades <- tapply(BD1$factor * BD1$negocio, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+prom_otrab_ing_entidades <- tapply(BD1$factor * BD1$otros_trab, BD1$NOMBRE, sum) / tapply(BD1$factor, BD1$NOMBRE, sum)
+
+
+# Guardamos los resultados en un data frame
+promedios_nacional <- data.frame(
+    NOMBRE = "Total",
+    PROM_ING_COR = prom_ing_cor_total,
+    PROM_ING_TRAB = prom_ingtrab_total,
+    PROM_RENTAS = prom_rentas_total,
+    PROM_TRANSFER = prom_transfer_total,
+    PROM_ESTIM_ALQU = prom_estim_alqu_total,
+    PROM_OTROS_ING = prom_otros_ing_total,
+    PROM_TRABAJO_ING = prom_trabajo_total,
+    PROM_NEGOCIO_ING = prom_negocio_total,
+    PROM_OTRAB_ING = prom_otrab_total
+)
+
+promedios_por_entidad <- data.frame(
+    NOMBRE = nombres,
+    PROM_ING_COR = prom_ing_cor_entidades,
+    PROM_ING_TRAB = prom_ingtrab_entidades,
+    PROM_RENTAS = prom_rentas_entidades,
+    PROM_TRANSFER = prom_transfer_entidades,
+    PROM_ESTIM_ALQU = prom_estim_alqu_entidades,
+    PROM_OTROS_ING = prom_otros_ing_entidades,
+    PROM_TRABAJO_ING = prom_trabajo_ing_entidades,
+    PROM_NEGOCIO_ING = prom_negocio_ing_entidades,
+    PROM_OTRAB_ING = prom_otrab_ing_entidades
+)
+
+# Creamos una nueva columna para el decil de cada hogar
+BD1$DECIL <- cut(BD1$ACUMULA2, breaks = quantile(BD1$ACUMULA2, probs = seq(0, 1, by = 0.1)), labels = FALSE)
+
+# Función para calcular el promedio por decil y entidad
+calcular_promedio_por_decil <- function(data, variable) {
+    promedios_decil <- tapply(data$factor * data[[variable]], list(data$NOMBRE, data$DECIL), sum) /
+        tapply(data$factor, list(data$NOMBRE, data$DECIL), sum)
+    promedios_decil[is.nan(promedios_decil)] <- NA
+    return(as.data.frame(promedios_decil))
+}
+
+# Calcular los promedios por decil para cada variable de interés
+promedios_ing_cor_decil <- calcular_promedio_por_decil(BD1, "ing_cor")
+promedios_ing_trab_decil <- calcular_promedio_por_decil(BD1, "ingtrab")
+promedios_rentas_decil <- calcular_promedio_por_decil(BD1, "rentas")
+promedios_transfer_decil <- calcular_promedio_por_decil(BD1, "transfer")
+promedios_estim_alqu_decil <- calcular_promedio_por_decil(BD1, "estim_alqu")
+promedios_otros_ing_decil <- calcular_promedio_por_decil(BD1, "otros_ing")
+promedios_trabajo_ing_decil <- calcular_promedio_por_decil(BD1, "trabajo")
+promedios_negocio_ing_decil <- calcular_promedio_por_decil(BD1, "negocio")
+promedios_otrab_ing_decil <- calcular_promedio_por_decil(BD1, "otros_trab")
+
+
+# Cambiar los nombres de las columnas para que indiquen el decil
+colnames(promedios_ing_cor_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_ing_trab_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_rentas_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_transfer_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_estim_alqu_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otros_ing_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_trabajo_ing_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_negocio_ing_decil) <- paste("DECIL", 1:10, sep = "_")
+colnames(promedios_otrab_ing_decil) <- paste("DECIL", 1:10, sep = "_")
+
+
+# Unir los promedios por decil para cada variable
+promedios_por_entidad_decil <- cbind(promedios_por_entidad, promedios_ing_cor_decil, promedios_ing_trab_decil, promedios_rentas_decil, promedios_transfer_decil,promedios_estim_alqu_decil, promedios_otros_ing_decil,promedios_trabajo_ing_decil,promedios_negocio_ing_decil,promedios_otrab_ing_decil)
+
+# Función para calcular los promedios por decil para cada variable adicional
+calcular_promedios_por_variable_adicional_decil <- function(data, variable_adicional) {
+    promedios_decil <- calcular_promedio_por_decil(data, variable_adicional)
+    colnames(promedios_decil) <- paste(variable_adicional, colnames(promedios_decil), sep = "_")
+    return(promedios_decil)
+}
+
+# Calcular los promedios por decil para cada variable adicional
+promedios_jubilacion_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "jubilacion")
+promedios_becas_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "becas")
+promedios_donativos_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "donativos")
+promedios_remesas_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "remesas")
+promedios_bene_gob_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "bene_gob")
+promedios_transf_hog_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "transf_hog")
+promedios_trans_inst_decil <- calcular_promedios_por_variable_adicional_decil(BD1, "trans_inst")
+
+# Unir los promedios por decil para cada variable adicional
+promedios_por_entidad_decil <- cbind(
+    promedios_por_entidad_decil,
+    promedios_jubilacion_decil,
+    promedios_becas_decil,
+    promedios_donativos_decil,
+    promedios_remesas_decil,
+    promedios_bene_gob_decil,
+    promedios_transf_hog_decil,
+    promedios_trans_inst_decil
+)
+
+# Filtrar por generación
+promedios_por_entidad_decil_Baby_Boomers <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Baby Boomers", ]
+promedios_por_entidad_decil_Generación_X <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Generación X", ]
+promedios_por_entidad_decil_GeneracionZ <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Generación Z", ]
+promedios_por_entidad_decil_Millennials <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Millennials", ]
+
+# Dataframes para cada variable adicional por generación
+promedios_jubilacion_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "jubilacion")
+promedios_jubilacion_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "jubilacion")
+promedios_jubilacion_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "jubilacion")
+promedios_jubilacion_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "jubilacion")
+
+promedios_becas_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "becas")
+promedios_becas_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "becas")
+promedios_becas_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "becas")
+promedios_becas_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "becas")
+
+promedios_donativos_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "donativos")
+promedios_donativos_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "donativos")
+promedios_donativos_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "donativos")
+promedios_donativos_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "donativos")
+
+promedios_remesas_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "remesas")
+promedios_remesas_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "remesas")
+promedios_remesas_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "remesas")
+promedios_remesas_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "remesas")
+
+promedios_bene_gob_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "bene_gob")
+promedios_bene_gob_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "bene_gob")
+promedios_bene_gob_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "bene_gob")
+promedios_bene_gob_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "bene_gob")
+
+promedios_transf_hog_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "transf_hog")
+promedios_transf_hog_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "transf_hog")
+promedios_transf_hog_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "transf_hog")
+promedios_transf_hog_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "transf_hog")
+
+promedios_trans_inst_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "trans_inst")
+promedios_trans_inst_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "trans_inst")
+promedios_trans_inst_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "trans_inst")
+promedios_trans_inst_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "trans_inst")
+
+promedios_ing_cor_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "ing_cor")
+promedios_ing_cor_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "ing_cor")
+promedios_ing_cor_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "ing_cor")
+promedios_ing_cor_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "ing_cor")
+
+promedios_ingtrab_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "ingtrab")
+promedios_ingtrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "ingtrab")
+promedios_ingtrabr_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "ingtrab")
+promedios_ingtrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "ingtrab")
+
+promedios_trabajo_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "trabajo")
+promedios_trabajo_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "trabajo")
+promedios_trabajor_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "trabajo")
+promedios_trabajo_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "trabajo")
+
+promedios_negocio_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "negocio")
+promedios_ingtrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "negocio")
+promedios_ingtrabr_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "negocio")
+promedios_ingtrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "negocio")
+
+promedios_otrab_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "otros_trab")
+promedios_otrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "otros_trab")
+promedios_otrab_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "otros_trab")
+promedios_otrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "otros_trab")
