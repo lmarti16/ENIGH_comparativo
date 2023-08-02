@@ -52,29 +52,39 @@ Conc18 <- Conc18 %>%
     mutate(NOMBRE = factor(entidad, levels = 1:32, labels = nombres))
 
 # Definir los rangos de edad por generación
-babyboomers <- 58:76 # nacidos entre 1946 y 1964
-generacionx <- 42:57 # nacidos entre 1965 y 1980
-millennials <- 26:41 # nacidos entre 1981 y 1996
-generacionz <- 10:25 # nacidos entre 1997 y 2012
+babyboomers22 <- 58:76 # nacidos entre 1946 y 1964
+generacionx22 <- 42:57 # nacidos entre 1965 y 1980
+millennials22 <- 26:41 # nacidos entre 1981 y 1996
+generacionz22 <- 10:25 # nacidos entre 1997 y 2012
+
+babyboomers20 <- 56:74 # nacidos entre 1946 y 1964
+generacionx20 <- 40:55 # nacidos entre 1965 y 1980
+millennials20 <- 24:39 # nacidos entre 1981 y 1996
+generacionz20 <- 8:23 # nacidos entre 1997 y 2012
+
+babyboomers18 <- 53:72 # nacidos entre 1946 y 1964
+generacionx18 <- 38:53 # nacidos entre 1965 y 1980
+millennials18 <- 23:37 # nacidos entre 1981 y 1996
+generacionz18 <- 6:21 # nacidos entre 1997 y 2012
 
 # Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
 Conc22$generacion <- NA # inicializamos la variable con valores faltantes
-Conc22$generacion[Conc22$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
-Conc22$generacion[Conc22$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
-Conc22$generacion[Conc22$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
-Conc22$generacion[Conc22$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+Conc22$generacion[Conc22$edad %in% babyboomers22] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc22$generacion[Conc22$edad %in% generacionx22] <- "Generación X" # asignamos la categoría Generación X
+Conc22$generacion[Conc22$edad %in% millennials22] <- "Millennials" # asignamos la categoría Millennials
+Conc22$generacion[Conc22$edad %in% generacionz22] <- "Generación Z" # asignamos la categoría Generación Z
 
 Conc20$generacion <- NA # inicializamos la variable con valores faltantes
-Conc20$generacion[Conc20$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
-Conc20$generacion[Conc20$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
-Conc20$generacion[Conc20$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
-Conc20$generacion[Conc20$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+Conc20$generacion[Conc20$edad %in% babyboomers20] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc20$generacion[Conc20$edad %in% generacionx20] <- "Generación X" # asignamos la categoría Generación X
+Conc20$generacion[Conc20$edad %in% millennials20] <- "Millennials" # asignamos la categoría Millennials
+Conc20$generacion[Conc20$edad %in% generacionz20] <- "Generación Z" # asignamos la categoría Generación Z
 
 Conc18$generacion <- NA # inicializamos la variable con valores faltantes
-Conc18$generacion[Conc18$edad %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
-Conc18$generacion[Conc18$edad %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
-Conc18$generacion[Conc18$edad %in% millennials] <- "Millennials" # asignamos la categoría Millennials
-Conc18$generacion[Conc18$edad %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+Conc18$generacion[Conc18$edad %in% babyboomers18] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+Conc18$generacion[Conc18$edad %in% generacionx18] <- "Generación X" # asignamos la categoría Generación X
+Conc18$generacion[Conc18$edad %in% millennials18] <- "Millennials" # asignamos la categoría Millennials
+Conc18$generacion[Conc18$edad %in% generacionz18] <- "Generación Z" # asignamos la categoría Generación Z
 
 # Seleccionamos las variables de interés, incluyendo las nuevas variables
 Conc22 <- Conc22[c("foliohog", "ing_cor", "factor", "ingtrab", "trabajo", "negocio",
@@ -336,8 +346,6 @@ calcular_promedio_por_decil <- function(data, variable) {
     return(as.data.frame(promedios_decil))
 }
 
-
-
 # Calcular los promedios por decil para cada variable de interés
 promedios_ing_cor_decil22 <- calcular_promedio_por_decil(BD22, "ing_cor")
 promedios_ing_trab_decil22 <- calcular_promedio_por_decil(BD22, "ingtrab")
@@ -400,7 +408,6 @@ colnames(promedios_otros_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
 colnames(promedios_trabajo_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
 colnames(promedios_negocio_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
 colnames(promedios_otrab_ing_decil18) <- paste("DECIL", 1:10, sep = "_")
-
 
 # Unir los promedios por decil para cada variable
 promedios_por_entidad_decil22 <- cbind(promedios_por_entidad22, promedios_ing_cor_decil22, promedios_ing_trab_decil22, promedios_rentas_decil22, promedios_transfer_decil22,promedios_estim_alqu_decil22, promedios_otros_ing_decil22,promedios_trabajo_ing_decil22,promedios_negocio_ing_decil22,promedios_otrab_ing_decil22)
@@ -473,79 +480,202 @@ promedios_por_entidad_decil18 <- cbind(
     promedios_transf_hog_decil18,
     promedios_trans_inst_decil18
 )
-
-
-
-
-
-
-
-
-
-
 # Filtrar por generación
-promedios_por_entidad_decil_Baby_Boomers <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Baby Boomers", ]
-promedios_por_entidad_decil_Generación_X <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Generación X", ]
-promedios_por_entidad_decil_GeneracionZ <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Generación Z", ]
-promedios_por_entidad_decil_Millennials <- promedios_por_entidad_decil[promedios_por_entidad_decil$generacion == "Millennials", ]
+promedios_por_entidad_decil_Baby_Boomers22 <- promedios_por_entidad_decil22[promedios_por_entidad_decil22$generacion == "Baby Boomers", ]
+promedios_por_entidad_decil_Generación_X22 <- promedios_por_entidad_decil22[promedios_por_entidad_decil22$generacion == "Generación X", ]
+promedios_por_entidad_decil_GeneracionZ22 <- promedios_por_entidad_decil22[promedios_por_entidad_decil22$generacion == "Generación Z", ]
+promedios_por_entidad_decil_Millennials22 <- promedios_por_entidad_decil22[promedios_por_entidad_decil22$generacion == "Millennials", ]
 
 # Dataframes para cada variable adicional por generación
-promedios_jubilacion_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "jubilacion")
-promedios_jubilacion_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "jubilacion")
-promedios_jubilacion_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "jubilacion")
-promedios_jubilacion_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "jubilacion")
+promedios_jubilacion_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "jubilacion")
+promedios_jubilacion_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "jubilacion")
+promedios_jubilacion_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "jubilacion")
+promedios_jubilacion_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "jubilacion")
 
-promedios_becas_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "becas")
-promedios_becas_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "becas")
-promedios_becas_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "becas")
-promedios_becas_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "becas")
+promedios_becas_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "becas")
+promedios_becas_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "becas")
+promedios_becas_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "becas")
+promedios_becas_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "becas")
 
-promedios_donativos_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "donativos")
-promedios_donativos_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "donativos")
-promedios_donativos_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "donativos")
-promedios_donativos_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "donativos")
+promedios_donativos_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "donativos")
+promedios_donativos_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "donativos")
+promedios_donativos_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "donativos")
+promedios_donativos_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "donativos")
 
-promedios_remesas_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "remesas")
-promedios_remesas_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "remesas")
-promedios_remesas_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "remesas")
-promedios_remesas_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "remesas")
+promedios_remesas_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "remesas")
+promedios_remesas_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "remesas")
+promedios_remesas_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "remesas")
+promedios_remesas_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "remesas")
 
-promedios_bene_gob_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "bene_gob")
-promedios_bene_gob_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "bene_gob")
-promedios_bene_gob_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "bene_gob")
-promedios_bene_gob_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "bene_gob")
+promedios_bene_gob_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "bene_gob")
+promedios_bene_gob_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "bene_gob")
+promedios_bene_gob_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "bene_gob")
+promedios_bene_gob_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "bene_gob")
 
-promedios_transf_hog_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "transf_hog")
-promedios_transf_hog_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "transf_hog")
-promedios_transf_hog_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "transf_hog")
-promedios_transf_hog_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "transf_hog")
+promedios_transf_hog_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "transf_hog")
+promedios_transf_hog_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "transf_hog")
+promedios_transf_hog_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "transf_hog")
+promedios_transf_hog_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "transf_hog")
 
-promedios_trans_inst_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "trans_inst")
-promedios_trans_inst_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "trans_inst")
-promedios_trans_inst_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "trans_inst")
-promedios_trans_inst_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "trans_inst")
+promedios_trans_inst_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "trans_inst")
+promedios_trans_inst_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "trans_inst")
+promedios_trans_inst_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "trans_inst")
+promedios_trans_inst_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "trans_inst")
 
-promedios_ing_cor_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "ing_cor")
-promedios_ing_cor_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "ing_cor")
-promedios_ing_cor_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "ing_cor")
-promedios_ing_cor_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "ing_cor")
+promedios_ing_cor_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "ing_cor")
+promedios_ing_cor_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "ing_cor")
+promedios_ing_cor_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "ing_cor")
+promedios_ing_cor_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "ing_cor")
 
-promedios_ingtrab_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "ingtrab")
-promedios_ingtrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "ingtrab")
-promedios_ingtrabr_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "ingtrab")
-promedios_ingtrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "ingtrab")
+promedios_ingtrab_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "ingtrab")
+promedios_ingtrab_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "ingtrab")
+promedios_ingtrabr_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "ingtrab")
+promedios_ingtrab_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "ingtrab")
 
-promedios_trabajo_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "trabajo")
-promedios_trabajo_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "trabajo")
-promedios_trabajor_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "trabajo")
-promedios_trabajo_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "trabajo")
+promedios_trabajo_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "trabajo")
+promedios_trabajo_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "trabajo")
+promedios_trabajor_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "trabajo")
+promedios_trabajo_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "trabajo")
 
-promedios_negocio_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "negocio")
-promedios_ingtrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "negocio")
-promedios_ingtrabr_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "negocio")
-promedios_ingtrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "negocio")
+promedios_negocio_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "negocio")
+promedios_ingtrab_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "negocio")
+promedios_ingtrabr_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "negocio")
+promedios_ingtrab_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "negocio")
 
-promedios_otrab_decil_Baby_Boomers <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Baby Boomers", ], "otros_trab")
-promedios_otrab_decil_Generación_X <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación X", ], "otros_trab")
-promedios_otrab_decil_GeneracionZ <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Generación Z", ], "otros_trab")
-promedios_otrab_decil_Millennials <- calcular_promedios_por_variable_adicional_decil(BD1[BD1$generacion == "Millennials", ], "otros_trab")
+promedios_otrab_decil_Baby_Boomers22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Baby Boomers", ], "otros_trab")
+promedios_otrab_decil_Generación_X22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación X", ], "otros_trab")
+promedios_otrab_decil_GeneracionZ22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Generación Z", ], "otros_trab")
+promedios_otrab_decil_Millennials22 <- calcular_promedios_por_variable_adicional_decil(BD22[BD22$generacion == "Millennials", ], "otros_trab")
+
+# Filtrar por generación
+promedios_por_entidad_decil_Baby_Boomers20 <- promedios_por_entidad_decil20[promedios_por_entidad_decil20$generacion == "Baby Boomers", ]
+promedios_por_entidad_decil_Generación_X20 <- promedios_por_entidad_decil20[promedios_por_entidad_decil20$generacion == "Generación X", ]
+promedios_por_entidad_decil_GeneracionZ20 <- promedios_por_entidad_decil20[promedios_por_entidad_decil20$generacion == "Generación Z", ]
+promedios_por_entidad_decil_Millennials20 <- promedios_por_entidad_decil20[promedios_por_entidad_decil20$generacion == "Millennials", ]
+
+# Dataframes para cada variable adicional por generación
+promedios_jubilacion_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "jubilacion")
+promedios_jubilacion_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "jubilacion")
+promedios_jubilacion_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "jubilacion")
+promedios_jubilacion_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "jubilacion")
+
+promedios_becas_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "becas")
+promedios_becas_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "becas")
+promedios_becas_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "becas")
+promedios_becas_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "becas")
+
+promedios_donativos_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "donativos")
+promedios_donativos_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "donativos")
+promedios_donativos_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "donativos")
+promedios_donativos_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "donativos")
+
+promedios_remesas_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "remesas")
+promedios_remesas_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "remesas")
+promedios_remesas_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "remesas")
+promedios_remesas_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "remesas")
+
+promedios_bene_gob_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "bene_gob")
+promedios_bene_gob_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "bene_gob")
+promedios_bene_gob_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "bene_gob")
+promedios_bene_gob_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "bene_gob")
+
+promedios_transf_hog_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "transf_hog")
+promedios_transf_hog_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "transf_hog")
+promedios_transf_hog_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "transf_hog")
+promedios_transf_hog_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "transf_hog")
+
+promedios_trans_inst_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "trans_inst")
+promedios_trans_inst_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "trans_inst")
+promedios_trans_inst_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "trans_inst")
+promedios_trans_inst_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "trans_inst")
+
+promedios_ing_cor_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "ing_cor")
+promedios_ing_cor_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "ing_cor")
+promedios_ing_cor_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "ing_cor")
+promedios_ing_cor_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "ing_cor")
+
+promedios_ingtrab_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "ingtrab")
+promedios_ingtrab_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "ingtrab")
+promedios_ingtrabr_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "ingtrab")
+promedios_ingtrab_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "ingtrab")
+
+promedios_trabajo_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "trabajo")
+promedios_trabajo_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "trabajo")
+promedios_trabajor_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "trabajo")
+promedios_trabajo_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "trabajo")
+
+promedios_negocio_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "negocio")
+promedios_ingtrab_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "negocio")
+promedios_ingtrabr_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "negocio")
+promedios_ingtrab_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "negocio")
+
+promedios_otrab_decil_Baby_Boomers20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Baby Boomers", ], "otros_trab")
+promedios_otrab_decil_Generación_X20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación X", ], "otros_trab")
+promedios_otrab_decil_GeneracionZ20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Generación Z", ], "otros_trab")
+promedios_otrab_decil_Millennials20 <- calcular_promedios_por_variable_adicional_decil(BD20[BD20$generacion == "Millennials", ], "otros_trab")
+# Filtrar por generación
+promedios_por_entidad_decil_Baby_Boomers18 <- promedios_por_entidad_decil18[promedios_por_entidad_decil18$generacion == "Baby Boomers", ]
+promedios_por_entidad_decil_Generación_X18 <- promedios_por_entidad_decil18[promedios_por_entidad_decil18$generacion == "Generación X", ]
+promedios_por_entidad_decil_GeneracionZ18 <- promedios_por_entidad_decil18[promedios_por_entidad_decil18$generacion == "Generación Z", ]
+promedios_por_entidad_decil_Millennials18 <- promedios_por_entidad_decil18[promedios_por_entidad_decil18$generacion == "Millennials", ]
+
+# Dataframes para cada variable adicional por generación
+promedios_jubilacion_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "jubilacion")
+promedios_jubilacion_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "jubilacion")
+promedios_jubilacion_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "jubilacion")
+promedios_jubilacion_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "jubilacion")
+
+promedios_becas_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "becas")
+promedios_becas_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "becas")
+promedios_becas_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "becas")
+promedios_becas_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "becas")
+
+promedios_donativos_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "donativos")
+promedios_donativos_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "donativos")
+promedios_donativos_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "donativos")
+promedios_donativos_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "donativos")
+
+promedios_remesas_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "remesas")
+promedios_remesas_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "remesas")
+promedios_remesas_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "remesas")
+promedios_remesas_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "remesas")
+
+promedios_bene_gob_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "bene_gob")
+promedios_bene_gob_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "bene_gob")
+promedios_bene_gob_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "bene_gob")
+promedios_bene_gob_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "bene_gob")
+
+promedios_transf_hog_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "transf_hog")
+promedios_transf_hog_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "transf_hog")
+promedios_transf_hog_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "transf_hog")
+promedios_transf_hog_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "transf_hog")
+
+promedios_trans_inst_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "trans_inst")
+promedios_trans_inst_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "trans_inst")
+promedios_trans_inst_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "trans_inst")
+promedios_trans_inst_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "trans_inst")
+
+promedios_ing_cor_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "ing_cor")
+promedios_ing_cor_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "ing_cor")
+promedios_ing_cor_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "ing_cor")
+promedios_ing_cor_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "ing_cor")
+
+promedios_ingtrab_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "ingtrab")
+promedios_ingtrab_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "ingtrab")
+promedios_ingtrabr_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "ingtrab")
+promedios_ingtrab_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "ingtrab")
+
+promedios_trabajo_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "trabajo")
+promedios_trabajo_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "trabajo")
+promedios_trabajor_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "trabajo")
+promedios_trabajo_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "trabajo")
+
+promedios_negocio_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "negocio")
+promedios_ingtrab_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "negocio")
+promedios_ingtrabr_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "negocio")
+promedios_ingtrab_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "negocio")
+
+promedios_otrab_decil_Baby_Boomers18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Baby Boomers", ], "otros_trab")
+promedios_otrab_decil_Generación_X18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación X", ], "otros_trab")
+promedios_otrab_decil_GeneracionZ18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Generación Z", ], "otros_trab")
+promedios_otrab_decil_Millennials18 <- calcular_promedios_por_variable_adicional_decil(BD18[BD18$generacion == "Millennials", ], "otros_trab")
