@@ -48,30 +48,30 @@ millennials <- 26:41 # nacidos entre 1981 y 1996
 generacionz <- 10:25 # nacidos entre 1997 y 2012
 
 # Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
-BD_generacion <- BD22 # usamos BD22 en lugar de Conc22
-BD_generacion $generacion <- NA # inicializamos la variable con valores faltantes
-BD_generacion $generacion[BD_generacion $edad_jefe %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
-BD_generacion $generacion[BD_generacion $edad_jefe %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
-BD_generacion $generacion[BD_generacion $edad_jefe %in% millennials] <- "Millennials" # asignamos la categoría Millennials
-BD_generacion $generacion[BD_generacion $edad_jefe %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
+BD_generacion22 <- BD22 # usamos BD22 en lugar de Conc22
+BD_generacion22 $generacion <- NA # inicializamos la variable con valores faltantes
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% babyboomers] <- "Baby Boomers" # asignamos la categoría Baby Boomers
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% generacionx] <- "Generación X" # asignamos la categoría Generación X
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% millennials] <- "Millennials" # asignamos la categoría Millennials
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% generacionz] <- "Generación Z" # asignamos la categoría Generación Z
 
 # Calcula el ingreso corriente promedio por generación y por decil, para cada una de las variables de interés
-resultados_generacion <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ generacion + DECIL, data = BD_generacion, FUN = weighted.mean, weights = factor)
-
-# Crea cuatro nuevos dataframes, uno por cada generación
-resultados_babyboomers <- resultados_generacion[resultados_generacion$generacion == "Baby Boomers",]
-resultados_generacionx <- resultados_generacion[resultados_generacion$generacion == "Generación X",]
-resultados_millennials <- resultados_generacion[resultados_generacion$generacion == "Millennials",]
-resultados_generacionz <- resultados_generacion[resultados_generacion$generacion == "Generación Z",]
+resultados_generacion22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ generacion + DECIL, data = BD_generacion22, FUN = weighted.mean, weights = factor)
 
 # Redondear todos los resultados a 2 decimales
-resultados_generacion$ING_COR <- round(resultados_generacion$ing_cor, 2)
-resultados_generacion$ING_TRAB <- round(resultados_generacion$ingtrab, 2)
-resultados_generacion$NEGOCIO <- round(resultados_generacion$negocio, 2)
-resultados_generacion$TRABAJO <- round(resultados_generacion$trabajo, 2)
+resultados_generacion22$ING_COR <- round(resultados_generacion22$ing_cor, 2)
+resultados_generacion22$ING_TRAB <- round(resultados_generacion22$ingtrab, 2)
+resultados_generacion22$NEGOCIO <- round(resultados_generacion22$negocio, 2)
+resultados_generacion22$TRABAJO <- round(resultados_generacion22$trabajo, 2)
+
+# Crea cuatro nuevos dataframes, uno por cada generación
+resultados_babyboomers22 <- resultados_generacion22[resultados_generacion22$generacion == "Baby Boomers",]
+resultados_generacionx22 <- resultados_generacion22[resultados_generacion22$generacion == "Generación X",]
+resultados_millennials22 <- resultados_generacion22[resultados_generacion22$generacion == "Millennials",]
+resultados_generacionz22 <- resultados_generacion22[resultados_generacion22$generacion == "Generación Z",]
 
 # Imprime los resultados por generación
-print(resultados_babyboomers)
-print(resultados_generacionx)
-print(resultados_millennials)
-print(resultados_generacionz)
+print(resultados_babyboomers22)
+print(resultados_generacionx22)
+print(resultados_millennials22)
+print(resultados_generacionz22)
