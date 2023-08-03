@@ -33,10 +33,4 @@ BD_educacion22$educa_jefe <- as.factor(BD_educacion22$educa_jefe) # convertimos 
 levels(BD_educacion22$educa_jefe) <- c("Sin instrucción", "Preescolar", "Primaria incompleta", "Primaria completa", "Secundaria incompleta", "Secundaria completa", "Preparatoria incompleta", "Preparatoria completa", "Profesional incompleta", "Profesional completa", "Posgrado") # renombramos los niveles del factor
 
 # Calcula el ingreso corriente promedio por grado de estudio y por generación, para cada una de las variables de interés
-resultados_educacion22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ educa_jefe + generacion, data = BD_educacion22, FUN = weighted.mean, weights = factor)
-
-# Crea un nuevo dataframe que se llame Ingresos_educagen con los resultados anteriores
-Ingresos_educagen <- resultados_educacion22
-
-# Verifica que el dataframe tenga 44 observaciones
-dim(Ingresos_educagen)
+Ingresos_educagen22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ educa_jefe + generacion, data = BD_educacion22, FUN = weighted.mean, weights = factor)
