@@ -2,6 +2,7 @@
 library(foreign)
 library(doBy)
 library(reldist)
+library(dplyr)
 
 # Establece la ruta del archivo CSV
 ruta_archivo22 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_22.csv"
@@ -17,7 +18,7 @@ Conc22 <- orderBy(~+ing_cor+folioviv+foliohog, data = Conc22)
 cincuentas <- 51:60 # nacidos entre 1946 y 1964
 cuarentas <- 41:50 # nacidos entre 1965 y 1980
 treintas <- 31:40 # nacidos entre 1981 y 1996
-veintes <- 20:30 # nacidos entre 1997 y 2012
+veintes <- 22:30 # nacidos entre 1997 y 2212
 
 # Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
 BD_generacion22 <- Conc22 # usamos Conc22 en lugar de BD22
@@ -34,3 +35,27 @@ levels(BD_educacion22$educa_jefe) <- c("Sin instrucción", "Preescolar", "Primar
 
 # Calcula el ingreso corriente promedio por grado de estudio y por generación, para cada una de las variables de interés
 Ingresos_educagen22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ educa_jefe + generacion, data = BD_educacion22, FUN = weighted.mean, weights = factor)
+
+# Redondear todos los resultados a 2 decimales
+Ingresos_educagen22$ing_cor <- round(Ingresos_educagen22$ing_cor, 2)
+Ingresos_educagen22$ingtrab <- round(Ingresos_educagen22$ingtrab, 2)
+Ingresos_educagen22$negocio <- round(Ingresos_educagen22$negocio, 2)
+Ingresos_educagen22$trabajo <- round(Ingresos_educagen22$trabajo, 2)
+
+# Cambia el nombre de las columnas
+colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "ing_cor"] <- "Ingreso Corriente trimestral"
+colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "ingtrab"] <- "Ingreso del trabajo"
+colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "negocio"] <- "Ingresos por trabajo independiente"
+colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "trabajo"] <- "Remuneraciones por trabajo subordinado"
+
+
+
+
+#SIEMPRE CAMBIA ESTO:
+
+# Definir el factor de multiplicación
+factorNO <- (1 + 0.05139)^4
+
+# Aplicar la función mutate_if al data frame
+promedios_nacionalNO <- mutate_if(promedios_nacionalNO, is.numeric, ~ . * factorNO)
+
