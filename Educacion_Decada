@@ -1,0 +1,42 @@
+# Carga las librerías necesarias
+library(foreign)
+library(doBy)
+library(reldist)
+
+# Establece la ruta del archivo CSV
+ruta_archivo22 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_22.csv"
+
+# Carga el archivo CSV en el dataframe Conc22
+Conc22 <- read.csv(ruta_archivo22)
+
+# Selecciona las variables de interés y ordena Conc22 de acuerdo a ing_cor, folioviv, foliohog
+Conc22 <- Conc22[c("folioviv", "foliohog", "ing_cor", "ingtrab","negocio", "trabajo" ,"factor", "edad_jefe", "educa_jefe")]
+Conc22 <- orderBy(~+ing_cor+folioviv+foliohog, data = Conc22)
+
+# Definir los rangos de edad por generación
+cincuentas <- 51:60 # nacidos entre 1946 y 1964
+cuarentas <- 41:50 # nacidos entre 1965 y 1980
+treintas <- 31:40 # nacidos entre 1981 y 1996
+veintes <- 20:30 # nacidos entre 1997 y 2012
+
+# Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
+BD_generacion22 <- Conc22 # usamos Conc22 en lugar de BD22
+BD_generacion22$generacion <- NA # inicializamos la variable con valores faltantes
+BD_generacion22$generacion[BD_generacion22$edad_jefe %in% cincuentas] <- "cincuentas" 
+BD_generacion22$generacion[BD_generacion22$edad_jefe %in% cuarentas] <- "cuarentas"
+BD_generacion22$generacion[BD_generacion22$edad_jefe %in% treintas] <- "treintas" 
+BD_generacion22$generacion[BD_generacion22$edad_jefe %in% veintes] <- "veintes" 
+
+# Crea una variable que indique el grado de estudio del jefe del hogar
+BD_educacion22 <- BD_generacion22 # usamos BD_generacion22 en lugar de Conc22
+BD_educacion22$educa_jefe <- as.factor(BD_educacion22$educa_jefe) # convertimos la variable en factor
+levels(BD_educacion22$educa_jefe) <- c("Sin instrucción", "Preescolar", "Primaria incompleta", "Primaria completa", "Secundaria incompleta", "Secundaria completa", "Preparatoria incompleta", "Preparatoria completa", "Profesional incompleta", "Profesional completa", "Posgrado") # renombramos los niveles del factor
+
+# Calcula el ingreso corriente promedio por grado de estudio y por generación, para cada una de las variables de interés
+resultados_educacion22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ educa_jefe + generacion, data = BD_educacion22, FUN = weighted.mean, weights = factor)
+
+# Crea un nuevo dataframe que se llame Ingresos_educagen con los resultados anteriores
+Ingresos_educagen <- resultados_educacion22
+
+# Verifica que el dataframe tenga 44 observaciones
+dim(Ingresos_educagen)
