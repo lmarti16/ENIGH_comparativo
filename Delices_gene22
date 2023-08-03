@@ -58,20 +58,20 @@ BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% generacionz] <- "Gen
 # Calcula el ingreso corriente promedio por generación y por decil, para cada una de las variables de interés
 resultados_generacion22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ generacion + DECIL, data = BD_generacion22, FUN = weighted.mean, weights = factor)
 
-# Redondear todos los resultados a 2 decimales
-resultados_generacion22$ING_COR <- round(resultados_generacion22$ing_cor, 2)
-resultados_generacion22$ING_TRAB <- round(resultados_generacion22$ingtrab, 2)
-resultados_generacion22$NEGOCIO <- round(resultados_generacion22$negocio, 2)
-resultados_generacion22$TRABAJO <- round(resultados_generacion22$trabajo, 2)
-
 # Crea cuatro nuevos dataframes, uno por cada generación
 resultados_babyboomers22 <- resultados_generacion22[resultados_generacion22$generacion == "Baby Boomers",]
 resultados_generacionx22 <- resultados_generacion22[resultados_generacion22$generacion == "Generación X",]
 resultados_millennials22 <- resultados_generacion22[resultados_generacion22$generacion == "Millennials",]
 resultados_generacionz22 <- resultados_generacion22[resultados_generacion22$generacion == "Generación Z",]
 
-# Imprime los resultados por generación
-print(resultados_babyboomers22)
-print(resultados_generacionx22)
-print(resultados_millennials22)
-print(resultados_generacionz22)
+# Redondear todos los resultados a 2 decimales
+resultados_generacion22$ing_cor <- round(resultados_generacion22$ing_cor, 2)
+resultados_generacion22$ingtrab <- round(resultados_generacion22$ingtrab, 2)
+resultados_generacion22$negocio <- round(resultados_generacion22$negocio, 2)
+resultados_generacion22$trabajo <- round(resultados_generacion22$trabajo, 2)
+
+# Cambia el nombre de las columnas
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ing_cor"] <- "Ingreso Corriente trimestral"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ingtrab"] <- "Ingreso Laboral"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "negocio"] <- "Trabajo independiente"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "trabajo"] <- "Trabajo Subordinado"
