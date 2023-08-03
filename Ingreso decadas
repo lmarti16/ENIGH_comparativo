@@ -1,0 +1,77 @@
+# Carga librerías necesarias
+library(foreign)
+library(doBy)
+library(reldist)
+
+# Establece la ruta del archivo CSV
+ruta_archivo22 <- "D:/52556/Documents/ENIGH 22/Historicos/concentradohogar_22.csv"
+
+# Carga el archivo CSV en el dataframe Conc22
+Conc22 <- read.csv(ruta_archivo22)
+
+# Selecciona las variables de interés y ordena Conc22 de acuerdo a ing_cor, folioviv, foliohog
+Conc22 <- Conc22[c("folioviv", "foliohog", "ing_cor", "ingtrab","negocio", "trabajo" ,"factor", "edad_jefe")]
+Conc22 <- orderBy(~+ing_cor+folioviv+foliohog, data = Conc22)
+
+# Suma todos los factores y guarda el valor en el vector tot_hogares22
+tot_hogares22 <- sum(Conc22$factor)
+# Se divide la suma de factores entre diez para sacar el tamaño del decil
+tam_dec22 <- trunc(tot_hogares22 / 10)
+
+# Creación de deciles de hogares
+BD22 <- Conc22
+BD22$MAXT <- BD22$ing_cor
+BD22 <- BD22[with(BD22, order(rank(MAXT))),]
+BD22$ACUMULA <- cumsum(BD22$factor)
+
+for (i in 1:9) {
+    a22 <- BD22[dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1,]$factor
+    BD22 <- rbind(BD22[1:(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1),],
+                  BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1):dim(BD22)[1],])
+    b22 <- tam_dec22 * i - BD22[dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1],]$ACUMULA
+    BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 1),]$factor <- b22
+    BD22[(dim(BD22[BD22$ACUMULA < tam_dec22 * i,])[1] + 2),]$factor <- (a22 - b22)
+}
+
+BD22$ACUMULA2 <- cumsum(BD22$factor)
+BD22$DECIL <- 0
+BD22[(BD22$ACUMULA2 <= tam_dec22),]$DECIL <- 1
+for (i in 1:9) {
+    BD22[((BD22$ACUMULA2 > tam_dec22 * i) & (BD22$ACUMULA2 <= tam_dec22 * (i + 1))),]$DECIL <- (i + 1)
+}
+BD22[BD22$DECIL %in% "0",]$DECIL <- 10
+
+# Definir los rangos de edad por generación
+cincuentas <- 41:50 # nacidos entre 1946 y 1964
+cuarentas <- 31:40 # nacidos entre 1965 y 1980
+treintas <- 21:30 # nacidos entre 1981 y 1996
+veintes <- 10:20 # nacidos entre 1997 y 2012
+
+# Creamos una variable que indique la generación a la que pertenece cada integrante del hogar
+BD_generacion22 <- BD22 # usamos BD22 en lugar de Conc22
+BD_generacion22 $generacion <- NA # inicializamos la variable con valores faltantes
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% cincuentas] <- "cincuentas" 
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% cuarentas] <- "cuarentas"
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% treintas] <- "treintas" 
+BD_generacion22 $generacion[BD_generacion22 $edad_jefe %in% veintes] <- "veintes" 
+
+# Calcula el ingreso corriente promedio por generación y por decil, para cada una de las variables de interés
+resultados_generacion22 <- aggregate(cbind(ing_cor, ingtrab, negocio, trabajo) ~ generacion + DECIL, data = BD_generacion22, FUN = weighted.mean, weights = factor)
+
+# Crea cuatro nuevos dataframes, uno por cada generación
+resultados_cincuentas22 <- resultados_generacion22[resultados_generacion22$generacion == "cincuentas",]
+resultados_cuarentas22 <- resultados_generacion22[resultados_generacion22$generacion == "cuarentas",]
+resultados_treintas22 <- resultados_generacion22[resultados_generacion22$generacion == "treintas",]
+resultados_veintes22 <- resultados_generacion22[resultados_generacion22$generacion == "veintes",]
+
+# Redondear todos los resultados a 2 decimales
+resultados_generacion22$ing_cor <- round(resultados_generacion22$ing_cor, 2)
+resultados_generacion22$ingtrab <- round(resultados_generacion22$ingtrab, 2)
+resultados_generacion22$negocio <- round(resultados_generacion22$negocio, 2)
+resultados_generacion22$trabajo <- round(resultados_generacion22$trabajo, 2)
+
+# Cambia el nombre de las columnas
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ing_cor"] <- "Ingreso Corriente trimestral"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ingtrab"] <- "Ingreso del trabajo"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "negocio"] <- "Ingresos por trabajo independiente"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "trabajo"] <- "Remuneraciones por trabajo subordinado"
