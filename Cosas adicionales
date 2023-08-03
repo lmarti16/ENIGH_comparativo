@@ -1,0 +1,29 @@
+
+
+#SIEMPRE CAMBIA ESTO:
+
+# Definir el factor de multiplicación
+factorNO <- (1 + 0.05139)^4
+
+# Aplicar la función mutate_if al data frame
+promedios_nacionalNO <- mutate_if(promedios_nacionalNO, is.numeric, ~ . * factorNO)
+
+
+CM_20_18 <- Ingresos_educagen20 %>%
+  mutate(CM_20_18 = (Ingresos_educagen20$`Ingreso Corriente trimestral` / Ingresos_educagen18$`Ingreso Corriente trimestral` - 1) * 100,
+         CM_20_18_trabajo = (Ingresos_educagen20$`Ingreso del trabajo` / Ingresos_educagen18$`Ingreso del trabajo` - 1) * 100,
+         CM_20_18_indep = (Ingresos_educagen20$`Ingresos por trabajo independiente` / Ingresos_educagen18$`Ingresos por trabajo independiente` - 1) * 100,
+         CM_20_18_subord = (Ingresos_educagen20$`Remuneraciones por trabajo subordinado` / Ingresos_educagen18$`Remuneraciones por trabajo subordinado` - 1) * 100)
+
+CM_22_18 <- Ingresos_educagen22 %>%
+  mutate(CM_22_18 = (Ingresos_educagen22$`Ingreso Corriente trimestral` / Ingresos_educagen18$`Ingreso Corriente trimestral` - 1) * 100,
+         CM_22_18_trabajo = (Ingresos_educagen22$`Ingreso del trabajo` / Ingresos_educagen18$`Ingreso del trabajo` - 1) * 100,
+         CM_22_18_indep = (Ingresos_educagen22$`Ingresos por trabajo independiente` / Ingresos_educagen18$`Ingresos por trabajo independiente` - 1) * 100,
+         CM_22_18_subord = (Ingresos_educagen22$`Remuneraciones por trabajo subordinado` / Ingresos_educagen18$`Remuneraciones por trabajo subordinado` - 1) * 100)
+
+CM_22_20 <- Ingresos_educagen22 %>%
+  mutate(CM_22_20 = (Ingresos_educagen22$`Ingreso Corriente trimestral` / Ingresos_educagen20$`Ingreso Corriente trimestral` - 1) * 100,
+         CM_22_20_trabajo = (Ingresos_educagen22$`Ingreso del trabajo` / Ingresos_educagen20$`Ingreso del trabajo` - 1) * 100,
+         CM_22_20_indep = (Ingresos_educagen22$`Ingresos por trabajo independiente` / Ingresos_educagen20$`Ingresos por trabajo independiente` - 1) * 100,
+         CM_22_20_subord = (Ingresos_educagen22$`Remuneraciones por trabajo subordinado` / Ingresos_educagen20$`Remuneraciones por trabajo subordinado` - 1) * 100)
+
