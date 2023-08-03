@@ -72,6 +72,6 @@ resultados_generacion22$trabajo <- round(resultados_generacion22$trabajo, 2)
 
 # Cambia el nombre de las columnas
 colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ing_cor"] <- "Ingreso Corriente trimestral"
-colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ingtrab"] <- "Ingreso Laboral"
-colnames(resultados_generacion22)[colnames(resultados_generacion22) == "negocio"] <- "Trabajo independiente"
-colnames(resultados_generacion22)[colnames(resultados_generacion22) == "trabajo"] <- "Trabajo Subordinado"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "ingtrab"] <- "Ingreso del trabajo"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "negocio"] <- "Ingresos por trabajo independiente"
+colnames(resultados_generacion22)[colnames(resultados_generacion22) == "trabajo"] <- "Remuneraciones por trabajo subordinado"
