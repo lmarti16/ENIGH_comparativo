@@ -47,15 +47,3 @@ colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "ing_cor"] <- "In
 colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "ingtrab"] <- "Ingreso del trabajo"
 colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "negocio"] <- "Ingresos por trabajo independiente"
 colnames(Ingresos_educagen22)[colnames(Ingresos_educagen22) == "trabajo"] <- "Remuneraciones por trabajo subordinado"
-
-
-
-
-#SIEMPRE CAMBIA ESTO:
-
-# Definir el factor de multiplicación
-factorNO <- (1 + 0.05139)^4
-
-# Aplicar la función mutate_if al data frame
-promedios_nacionalNO <- mutate_if(promedios_nacionalNO, is.numeric, ~ . * factorNO)
-
