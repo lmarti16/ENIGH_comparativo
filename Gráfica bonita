@@ -1,0 +1,25 @@
+library(forcats)
+library(dplyr)
+library(tidyr)
+
+CM_22_18_largo <- CM_22_18 %>%
+  pivot_longer(cols = starts_with("CM"), names_to = "cambio_marginal", values_to = "valor")
+
+CM_22_18_largo_filtrado <- CM_22_18_largo %>%
+  filter(educa_jefe %in% c("Preparatoria incompleta", "Preparatoria completa", 
+                           "Profesional incompleta", "Profesional completa", "Posgrado"))
+
+
+ggplot(CM_22_18_largo_filtrado, aes(x = factor(generacion, levels = c("veintes", "treintas", "cuarentas", "cincuentas")), y = valor, fill = fct_recode(cambio_marginal, "Ingreso Corriente Trimestral" = "CM_22_18", "Ingreso del trabajo" = "CM_22_18_trabajo", "Ingresos por trabajo independiente" = "CM_22_18_indep", "Remuneraciones por trabajo subordinado" = "CM_22_18_subord"))) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ educa_jefe, ncol = 1) +
+  labs(title = "Cambio marginal por educación y generación de 2022 a 2018",
+       x = "Generación",
+       y = "Cambio marginal (%)",
+       fill = "Ingreso",
+       caption = "Elaborado por @Luis_MartinezRz con datos de la ENIGH(18-20-22)\nTodos los datos son a pesos del 2022") +
+  theme_economist() +
+  scale_fill_economist() +
+  guides(fill = guide_legend(nrow = 2)) +
+  theme(legend.position = "bottom",
+        legend.text = element_text(size = 10))
