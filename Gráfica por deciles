@@ -1,0 +1,59 @@
+library(tidyverse)
+library(ggthemes)
+
+# Crear el dataframe con los datos
+Deciles_CDMX <- tribble(
+  ~`DECILES DE HOGARES`, ~`2016`, ~`2022`, ~`Cambio Marginal`,
+  "I", 1228, 1342, "9.28%",
+  "II", 2188, 2341, "6.99%",
+  "III", 2884, 3066, "6.32%",
+  "IV", 3594, 3804, "5.83%",
+  "V", 4419, 4606, "4.23%",
+  "VI", 5340, 5458, "2.21%",
+  "VII", 6673, 6612, "-0.91%",
+  "VIII", 8895, 8611, "-3.19%",
+  "IX", 13394, 11967, "-10.65%",
+  "X", 34169, 31926, "-6.56%"
+)
+
+# Ordenar el dataframe según el orden de los números romanos
+Deciles_CDMX <- Deciles_CDMX %>%
+  mutate(`DECILES DE HOGARES` = factor(`DECILES DE HOGARES`, levels = c("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X")))
+
+# Transformar el dataframe a formato largo
+Deciles_CDMX_long <- Deciles_CDMX %>%
+  pivot_longer(cols = c(`2016`, `2022`), names_to = "Año", values_to = "Valor")
+
+
+# Crear el gráfico de barras con el tema WSJ
+p <- ggplot(Deciles_CDMX_long, aes(x = `DECILES DE HOGARES`, y = Valor)) +
+    geom_col(aes(fill = Año), position = position_dodge()) + # Usar geom_col para crear barras apiladas
+    geom_text(aes(label = format(Valor, big.mark = ",", decimal.mark = ".", nsmall = 0), group = Año), # Formatear los valores sin decimales y con separadores de miles y decimales y agruparlos por año
+              position = position_dodge(width = 0.9), vjust = -0.5, # Ajustar la posición vertical y horizontal del texto y separarlo más de las barras
+              fontface = "bold") + # Cambiar el tipo de letra del texto
+    labs(title = "INGRESOS DE LOS CAPITALINOS", # Cambiar el título a mayúsculas
+         subtitle = "Los datos muestran que los deciles más bajos aumentaron su valor mientras que los más altos lo disminuyeron",
+         caption = expression(atop("Elaboró luis martínez","Con datos del INEGI")), # Usar expression y atop para poner dos líneas en el caption
+         x = "Deciles de hogares",
+         y = "Ingreso per cápita",
+         fill = "Año") +
+    theme_wsj() + # Aplicar el tema WSJ
+    geom_segment(aes(x = as.numeric(`DECILES DE HOGARES`) - .25, xend = as.numeric(`DECILES DE HOGARES`) + .25,
+                     y = max(Valor) * (.6 + .05 * as.numeric(`DECILES DE HOGARES`)), # Ajustar la altura de la línea según el decil
+                     yend = max(Valor) * (.6 + .05 * as.numeric(`DECILES DE HOGARES`)), # Ajustar la altura de la línea según el decil
+                     col = ifelse(grepl("-", `Cambio Marginal`), "red", "blue")), # Cambiar el color de la línea según el signo del cambio marginal
+                 linetype = "dashed") + # Usar una línea punteada
+    geom_text(data = Deciles_CDMX_long,
+              aes(x = as.numeric(`DECILES DE HOGARES`),
+                  y = max(Valor) * (.6 + .05 * as.numeric(`DECILES DE HOGARES`)), # Ajustar la altura del texto según el decil
+                  label = `Cambio Marginal`,
+                  col = ifelse(grepl("-", `Cambio Marginal`), "red", "blue")), # Cambiar el color del texto según el signo del cambio marginal
+              vjust = -0.5,
+              inherit.aes = FALSE) # Eliminar el argumento color que causaba el error
+
+# Para hacer el gráfico más atractivo se puede añadir lo siguiente:
+p %+%  scale_y_continuous(labels = scales::dollar) + # Formatear los valores del eje y como moneda
+    theme(plot.title = element_text(face = "bold", size = 16), # Aumentar el tamaño y el tipo de letra del título
+          plot.subtitle = element_text(size = 14), # Aumentar el tamaño del subtítulo
+          plot.caption = element_text(hjust = 0)) +
+    scale_color_identity() # Usar los colores asignados en aes() sin cambiarlos
