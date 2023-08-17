@@ -43,3 +43,68 @@ ggplot() +
     coord_sf(datum = NA) +
     # Aumentar la altura de la barra de colores
     guides(fill = guide_colourbar(barheight = unit(1, "cm"), barwidth = unit(15, "cm") ))
+
+
+
+#Zoom
+
+library(ggplot2)
+library(cowplot)
+
+# Coordenadas para el cuadro de zoom centrado en CDMX y áreas cercanas
+VALOR_MIN_X <- 283146.9197 - 100000
+VALOR_MAX_X <- 283146.9197 + 261000
+VALOR_MIN_Y <- 821739.32 - 250000
+VALOR_MAX_Y <- 821739.32 + 250000
+
+# Crear el mapa general con cuadro de zoom y rectángulo en el área de zoom
+mapa_general <- ggplot() +
+    annotation_map_tile(type = "osm", zoom = 6) +
+    geom_sf(data = Mapa_Carencias, aes(fill = plp), color = "black", alpha = 0.9) +
+    scale_fill_gradientn(
+        colours = c("darkgreen", "yellow", "darkred"),
+        name = "Población con ingreso inferior a la línea de pobreza por ingresos",
+        labels = scales::label_percent(scale = 100)
+
+    ) +
+    geom_sf_text(data = Mapa_Carencias, aes(label = paste0(round(plp * 100), "%")), size = 3) +  # Multiplicar por 100 y agregar "%"
+    labs(
+        title = "Población con ingreso inferior a la línea de pobreza por ingresos",
+        subtitle = "Por entidad Federativa",
+        caption = paste0(
+            "Elaborado por Luis Martínez (@Luis_MartinezRz)\nFuente: Medición de Pobreza 2022 del Coneval")
+    ) +
+    theme_map() +
+    theme(title = element_text(size = 20),
+          legend.position = "bottom",
+          legend.text = element_text(size = 10),
+          legend.title = element_text(size = 15),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          plot.caption = element_text(size = 10)) +  # Ajustar tamaño de la caption
+    coord_sf(datum = NA) +
+    # Aumentar la altura de la barra de colores
+    guides(fill = guide_colourbar(barheight = unit(1, "cm"), barwidth = unit(15, "cm") ))
+
+# Crear el mapa con zoom en CDMX y áreas cercanas
+mapa_zoom <- ggplot() +
+    geom_sf(data = Mapa_Carencias, aes(fill = plp), color = "black", alpha = 0.9) +
+    scale_fill_gradientn(
+        colours = c("darkgreen", "yellow", "darkred"),
+        name = "Población con ingreso inferior a la línea de pobreza por ingresos",
+    ) +
+    theme_map() +
+    theme(axis.text = element_blank(), axis.title = element_blank(), legend.position = "none") +
+    labs(title = "Zoom al centro del Pais", subtitle = NULL, caption = NULL) +
+    coord_sf(xlim = c(VALOR_MIN_X, VALOR_MAX_X), ylim = c(VALOR_MIN_Y, VALOR_MAX_Y)) +
+    geom_sf_text(data = Mapa_Carencias, aes(label = paste0(round(plp * 100), "%")), size = 3) +  # Multiplicar por 100 y agregar "%"
+    guides(fill = "none")  # Quitar la leyenda del mapa con zoom
+
+# Extraer la leyenda del mapa con zoom
+leyenda <- cowplot::get_legend(mapa_zoom + guides(fill = guide_legend(nrow = 1))) # Poner la leyenda en horizontal
+
+# Combinar los dos mapas y la leyenda en uno solo
+mapa_final <- cowplot::plot_grid(mapa_general, mapa_zoom, leyenda, ncol = 3, align = "v", rel_widths = c(3/4, 3/16, 1/16), rel_heights = c(1, 0.08)) # Ajustar los tamaños relativos de los mapas y la leyenda
+
+# Mostrar el mapa final
+print(mapa_final)
