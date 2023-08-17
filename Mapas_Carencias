@@ -1,0 +1,45 @@
+library(dplyr)
+library(tidyr)
+library(sf)
+library(ggplot2)
+library(readr)
+library(reshape2)	
+library(tidyr)
+library(readxl)
+library(colorspace)
+library(ggspatial)
+library(ggthemes)
+library(ggtext)
+library(dplyr)
+
+Entidades <- read_sf ("D:\\Descargas\\ENTIDAD\\ENTIDAD\\ENTIDAD.shp")
+
+colnames (Entidades) [2] <- "ent"
+
+Mapa_Carencias <- left_join(Entidades, care_ent_por, by = "ent")
+
+ggplot() +
+    annotation_map_tile(type = "osm", zoom = 6) +
+    geom_sf(data = Mapa_Carencias, aes(fill = plp), color = "black", alpha = 0.9) +
+    scale_fill_gradientn(
+        colours = c("darkgreen", "yellow", "darkred"),
+        name = "Población con ingreso inferior\na la línea de pobreza\npor ingresos",
+    ) +
+    geom_sf_text(data = Mapa_Carencias, aes(label = round(plp, 2)), size = 3) +
+    labs(
+        title = "Población con ingreso inferior a la\nlínea de pobreza por ingresos",
+        subtitle = "Por entidad Federativa",
+        caption = paste0(
+            "Elaborado por Luis Martínez (@Luis_MartinezRz)\nFuente: Medición de Pobreza 2022 del Coneval")
+    ) +
+    theme_economist() +
+    theme(title = element_text(size = 20),
+        legend.position = "bottom",
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 15),
+        axis.text = element_blank(),
+        axis.title = element_blank()
+    ) +
+    coord_sf(datum = NA) +
+    # Aumentar la altura de la barra de colores
+    guides(fill = guide_colourbar(barheight = unit(1, "cm"), barwidth = unit(15, "cm") ))
