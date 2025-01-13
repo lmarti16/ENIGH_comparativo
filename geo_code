@@ -1,0 +1,154 @@
+# -------------------------------------------------------------------------
+# 1) Cargar librerías necesarias
+# -------------------------------------------------------------------------
+library(ggmap)
+library(stringi)
+
+# -------------------------------------------------------------------------
+# 1.1) Registrar tu llave de API de Google
+# -------------------------------------------------------------------------
+# Reemplaza "TU_API_KEY" con tu clave real:
+register_google(key = "TU_API_KEY")
+
+# -------------------------------------------------------------------------
+# 2) Definir la función principal de geocodificación
+# -------------------------------------------------------------------------
+geocode_addresses_ggmap <- function(data,
+                                    # Nombres de columnas en tu tabla
+                                    calle_col     = "CALLE",
+                                    int_col       = "INT",
+                                    ext_col       = "EXT",
+                                    colonia_col   = "COLONIA",
+                                    cp_col        = "CP",
+                                    municipio_col = "MUNICIPIO",
+                                    entidad_col   = "ENTIDAD",
+                                    # Número de filas a geocodificar (Inf = todas)
+                                    nrows = Inf) {
+  # 0) Convertir todas las columnas de tipo character a UTF-8
+  char_cols <- sapply(data, is.character)
+  for (col_name in names(data)[char_cols]) {
+    data[[col_name]] <- stri_enc_toutf8(data[[col_name]], validate = TRUE)
+  }
+  
+  # 1) Mapeo de MUNICIPIO
+  #    Si MUNICIPIO = 5  → "Durango"
+  #    Si MUNICIPIO = 40 → "Monterrey"
+  #    (Agrega más casos si los necesitas)
+  data$municipio_nombre <- ifelse(
+    data[[municipio_col]] == 5,  "Durango",
+    ifelse(
+      data[[municipio_col]] == 40, "Monterrey",
+      NA_character_
+    )
+  )
+  
+  # 2) Mapeo de ENTIDAD
+  #    Si ENTIDAD = 10 → "Durango"
+  #    Si ENTIDAD = 19 → "Nuevo León"
+  #    (Agrega más casos si los necesitas)
+  data$entidad_nombre <- ifelse(
+    data[[entidad_col]] == 10, "Durango",
+    ifelse(
+      data[[entidad_col]] == 19, "Nuevo León",
+      NA_character_
+    )
+  )
+  
+  # 3) Construir la dirección completa en una nueva columna
+  data$direccion_completa <- paste0(
+    data[[calle_col]],
+    ifelse(is.na(data[[int_col]]) | data[[int_col]] == "", "", paste0(" Int ", data[[int_col]])),
+    ifelse(is.na(data[[ext_col]]) | data[[ext_col]] == "", "", paste0(" Num ", data[[ext_col]])),
+    ", ",
+    data[[colonia_col]],
+    ", CP ",
+    data[[cp_col]],
+    ", Municipio ",
+    data$municipio_nombre,
+    ", Entidad ",
+    data$entidad_nombre
+  )
+  
+  # Crear columnas vacías para lat y lng
+  data$lat <- NA_real_
+  data$lng <- NA_real_
+  
+  # 4) Determinar cuántas filas procesar
+  n <- min(nrow(data), nrows)
+  
+  # 5) Geocodificar sólo hasta n filas
+  for (i in seq_len(n)) {
+    address_i <- data$direccion_completa[i]
+    
+    # Llama a la función de ggmap para geocodificar
+    res <- ggmap::geocode(address_i, output = "latlon", source = "google")
+    
+    # Si geocode() devuelve valores válidos, los asigna
+    if (!is.na(res$lat) && !is.na(res$lon)) {
+      data$lat[i] <- res$lat
+      data$lng[i] <- res$lon
+    }
+  }
+  
+  # Retornar el data.frame con las nuevas columnas
+  return(data)
+}
+
+# -------------------------------------------------------------------------
+# 3) Definir los archivos a procesar en un vector
+# -------------------------------------------------------------------------
+archivos <- c(
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_7.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_8.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_9.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_10.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_11.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_12.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_13.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_14.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_15.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_16.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_17.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_18.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_19.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_20.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_1.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_2.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_3.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_4.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_5.csv",
+  "D:\\52556\\Documents\\PRI_24\\SNAL_PRI\\padron_partido\\PADRON_sin_latlng_part_6.csv"
+)
+
+# -------------------------------------------------------------------------
+# 4) Recorrer cada archivo, verificar existencia y procesarlo
+# -------------------------------------------------------------------------
+for (archivo in archivos) {
+  # Verificar que el archivo exista
+  if (!file.exists(archivo)) {
+    cat("No se encontró el archivo:", archivo, "\n")
+    next  # saltar al siguiente
+  }
+  
+  # Leer el archivo (en UTF-8)
+  cat("Leyendo archivo:", archivo, "\n")
+  df <- read.csv(archivo,
+                 stringsAsFactors = FALSE,
+                 encoding = "UTF-8")
+  
+  # Geocodificar
+  cat("Geocodificando...\n")
+  df_geocoded <- geocode_addresses_ggmap(df)
+  
+  # Generar nombre de salida (por ejemplo, reemplazamos ".csv" por "_con_latlng.csv")
+  archivo_salida <- sub("\\.csv$", "_con_latlng.csv", archivo)
+  
+  # Guardar como CSV UTF-8
+  cat("Guardando archivo:", archivo_salida, "\n\n")
+  write.csv(df_geocoded,
+            file = archivo_salida,
+            row.names = FALSE,
+            fileEncoding = "UTF-8")
+}
+
+cat("Proceso de geocodificación finalizado.\n")
