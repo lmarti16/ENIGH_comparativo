@@ -1,0 +1,89 @@
+# Limpia la memoria
+rm(list = ls())
+
+# Carga librerías necesarias
+library(data.table)
+library(reldist)
+
+# Leer la base de datos desde archivo CSV
+archivo <- "D:/Descargas/conjunto_de_datos_enigh_ns_2022_csv/conjunto_de_datos_concentradohogar_enigh2022_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh2022_ns.csv"
+hogares <- fread(archivo)
+
+# Selecciona las variables de interés
+Conc <- hogares[, .(
+    folioviv, foliohog, ing_cor, ingtrab, trabajo, negocio, otros_trab,
+    rentas, utilidad, arrenda, transfer, jubilacion, becas, donativos,
+    remesas, bene_gob, transf_hog, trans_inst, estim_alqu, otros_ing,
+    factor, upm, est_dis
+)]
+
+# Nombres para los deciles
+Numdec <- c("Total", paste0("D", 1:10))
+
+# Agrega columna para conteo de hogares
+Conc[, Nhog := 1]
+
+# Ordena por ingreso, folioviv y foliohog
+setorder(Conc, ing_cor, folioviv, foliohog)
+
+# Total de hogares (ponderado)
+tot_hogares <- sum(Conc$factor)
+
+# Tamaño de cada decil truncado
+tam_dec <- trunc(tot_hogares / 10)
+Conc[, tam_dec := tam_dec]
+
+# Crea nueva tabla y ordena por ingreso
+BD1 <- copy(Conc)
+BD1[, MAXT := ing_cor]
+setorder(BD1, MAXT)
+
+# Suma acumulada del factor
+BD1[, ACUMULA := cumsum(factor)]
+
+# Parte los hogares en deciles, ajustando factores
+# (Versión simplificada)
+ajustar_deciles <- function(dt, tam_dec) {
+    dt <- copy(dt)
+    decil_actual <- 1
+    acumulado <- 0
+    dt[, DECIL := 0]
+    for (i in 1:nrow(dt)) {
+        acumulado <- acumulado + dt[i]$factor
+        dt[i, DECIL := decil_actual]
+        if (acumulado >= tam_dec * decil_actual && decil_actual < 10) {
+            decil_actual <- decil_actual + 1
+        }
+    }
+    return(dt)
+}
+
+BD1 <- ajustar_deciles(BD1, tam_dec)
+
+# Total de hogares (ponderado)
+x <- BD1[, sum(factor), by = Nhog][, V1]
+
+# Total de hogares por decil
+y <- BD1[, sum(factor), by = DECIL][order(DECIL), V1]
+
+# Promedio ingreso total y por decil
+ing_cormed_t <- BD1[, sum(factor * ing_cor) / sum(factor)]
+ing_cormed_d <- BD1[, .(ing_cormed = sum(factor * ing_cor) / sum(factor)), by = DECIL][order(DECIL), ing_cormed]
+
+# Arma el cuadro final de promedios
+prom_rub <- data.frame(c(ing_cormed_t, ing_cormed_d))
+row.names(prom_rub) <- Numdec
+colnames(prom_rub) <- c("INGRESO CORRIENTE")
+
+# Datos para GINI
+deciles_hog_ingcor <- data.frame(
+    hogaresxdecil = y,
+    ingreso = ing_cormed_d
+)
+
+# Cálculo del GINI
+gini_result <- gini(deciles_hog_ingcor$ingreso, weights = deciles_hog_ingcor$hogaresxdecil)
+
+# Muestra los resultados
+print(round(prom_rub, 2))
+cat("\nCoeficiente de GINI:", round(gini_result, 4), "\n")
