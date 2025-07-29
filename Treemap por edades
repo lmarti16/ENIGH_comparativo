@@ -1,0 +1,52 @@
+# Limpia entorno
+rm(list = ls())
+
+# Carga librerías
+library(data.table)
+library(plotly)
+
+# Cargar datos
+archivo <- "D:/Descargas/conjunto_de_datos_enigh_ns_2022_csv/conjunto_de_datos_concentradohogar_enigh2022_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh2022_ns.csv"
+hogares <- fread(archivo)
+
+# Seleccionar columnas necesarias
+Conc <- hogares[, .(edad_jefe, ing_cor, factor)]
+
+# Crear grupos de edad
+Conc[, grupo_edad := cut(
+  edad_jefe,
+  breaks = c(0, 29, 39, 49, 59, 69, 79, 89, 99, Inf),
+  labels = c("Menos de 30", "30-39", "40-49", "50-59", "60-69", "70-79", "80-89", "90-99", "100+"),
+  right = FALSE
+)]
+
+# Sumar ingreso total ponderado por grupo de edad
+ingreso_edad_total <- Conc[!is.na(grupo_edad), .(
+  ingreso_total = sum(ing_cor * factor, na.rm = TRUE)
+), by = grupo_edad][order(-ingreso_total)]
+
+# Formatear ingreso como texto bonito con comas
+ingreso_edad_total[, texto := paste0(
+  grupo_edad, "\n$",
+  format(round(ingreso_total, 0), big.mark = ",", scientific = FALSE)
+)]
+
+# Crear treemap con texto formateado
+plot_ly(
+  data = ingreso_edad_total,
+  type = "treemap",
+  values = ~ingreso_total,
+  labels = ~texto,
+  parents = NA,
+  textinfo = "label+percent entry",
+  marker = list(colors = c(
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728",
+    "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22"
+  ))
+) %>%
+  layout(
+    title = list(
+      text = "Distribución del Ingreso Nacional por Grupo de Edad del Jefe de Hogar (ENIGH 2022)",
+      x = 0.05
+    )
+  )
