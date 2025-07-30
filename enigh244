@@ -1,0 +1,187 @@
+#ingreso por Mes-decil
+# Paquetes necesarios
+library(tidyverse)
+library(ggthemes)
+library(scales)
+library(RColorBrewer)
+
+# Datos de ingreso del trabajo trimestral por decil (original)
+trabajo_df <- tribble(
+    ~Decil,      ~Ingreso_trimestral,
+    "I",           7146,
+    "II",         15621,
+    "III",        22085,
+    "IV",         29211,
+    "V",          36282,
+    "VI",         44423,
+    "VII",        54270,
+    "VIII",       67181,
+    "IX",         86388,
+    "X",         148386
+)
+
+# Calcular ingreso mensual y ordenar deciles
+trabajo_df <- trabajo_df %>%
+    mutate(
+        Ingreso_mensual = Ingreso_trimestral / 3,
+        Decil = factor(Decil, levels = c("I","II","III","IV","V","VI","VII","VIII","IX","X"))
+    )
+
+# Media también mensual
+media_trabajo <- 51099 / 3
+
+# Paleta de colores
+colores_deciles <- brewer.pal(10, "Set3")
+
+# Gráfico final
+ggplot(trabajo_df, aes(x = Decil, y = Ingreso_mensual, fill = Decil)) +
+    geom_col(width = 0.7) +
+    geom_text(
+        aes(label = comma(Ingreso_mensual, accuracy = 1)),
+        vjust = -0.5, size = 3
+    ) +
+    geom_hline(yintercept = media_trabajo, linetype = "dashed", color = "red", size = 1) +
+    annotate("text", x = 1.5, y = media_trabajo + 1000,
+             label = paste0("Media nacional: $", comma(media_trabajo)),
+             color = "red", hjust = 0, size = 3.5) +
+    scale_fill_manual(values = colores_deciles) +
+    scale_y_continuous(labels = comma_format(prefix = "$")) +
+    labs(
+        title = "Ingreso mensual del trabajo por decil de hogar (ENIGH 2024)",
+        subtitle = "Los hogares del decil X ganan más de 20 veces lo que ganan los del decil I",
+        x = NULL, y = "$ Ingreso mensual del trabajo",
+        caption = "Fuente: INEGI. ENIGH 2024 | Elaboración propia @Luis_MartinezRz"
+    ) +
+    theme_stata() +
+    theme(
+        legend.position = "none",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 11),
+        plot.caption = element_text(size = 9, color = "gray40"),
+        axis.text = element_text(size = 10)
+    )
+
+
+-INGRESO MES DECIL
+# Paquetes necesarios
+library(tidyverse)
+library(ggthemes)
+library(scales)
+library(RColorBrewer)
+
+# Datos trimestrales originales
+deciles_data <- tribble(
+    ~Decil, ~`2016`, ~`2018`, ~`2020`, ~`2022`, ~`2024`,
+    "I",     12312,   12359,   12524,   14820,   16795,
+    "II",    21420,   21832,   21250,   24778,   28297,
+    "III",   28524,   29051,   28070,   32270,   36845,
+    "IV",    35517,   36185,   34729,   39726,   45245,
+    "V",     43444,   43807,   42049,   47897,   54308,
+    "VI",    52534,   52799,   50544,   57382,   64600,
+    "VII",   63991,   64074,   61335,   68972,   77451,
+    "VIII",  80527,   79832,   76366,   84801,   95291,
+    "IX",   108669,  106583,  101367,  111468,  123712,
+    "X",    255530,  226665,  205769,  221792,  236095
+)
+
+# Reestructura y convierte a mensual
+deciles_long <- deciles_data %>%
+    pivot_longer(-Decil, names_to = "Año", values_to = "Ingreso_trimestral") %>%
+    mutate(
+        Año = as.integer(Año),
+        Ingreso_mensual = Ingreso_trimestral / 3,
+        Decil = factor(Decil, levels = c("I","II","III","IV","V","VI","VII","VIII","IX","X"))
+    )
+
+# Paleta de colores
+colores_deciles <- brewer.pal(10, "Set3")
+
+# Gráfico
+ggplot(deciles_long, aes(x = Año, y = Ingreso_mensual, group = Decil, color = Decil)) +
+    geom_line(size = 1) +
+    geom_point(size = 2) +
+    geom_text(
+        aes(label = comma(Ingreso_mensual, accuracy = 1)), 
+        vjust = -0.8, size = 3, show.legend = FALSE
+    ) +
+    scale_color_manual(values = colores_deciles) +
+    scale_y_continuous(labels = comma_format(prefix = "$")) +
+    labs(
+        title = "En México, la diferencia entre los más ricos y más pobres es de 14 veces su ingreso",
+        subtitle = "Ingreso corriente mensual por decil de hogar (2016–2024)",
+        x = NULL, y = "$ Ingreso corriente mensual",
+        caption = "Fuente: INEGI. ENIGH 2024 | Elaboración propia @Luis_MartinezRz"
+    ) +
+    theme_stata() +
+    theme(
+        legend.position = "right",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 11),
+        plot.caption = element_text(size = 9, color = "gray40"),
+        axis.text = element_text(size = 10),
+        legend.title = element_blank()
+    )
+
+
+
+# Paquetes necesarios
+library(tidyverse)
+library(ggthemes)
+library(scales)
+library(RColorBrewer)
+
+# Datos de beneficios mensuales por decil
+beneficios_df <- tribble(
+    ~Decil,      ~Beneficio_trimestral,
+    "I",           2551,
+    "II",          2571,
+    "III",         2632,
+    "IV",          2416,
+    "V",           2411,
+    "VI",          2279,
+    "VII",         2363,
+    "VIII",        2516,
+    "IX",          2603,
+    "X",           2658
+)
+
+# Asegura orden correcto
+beneficios_df <- beneficios_df %>%
+    mutate(        Beneficio_mensual = (Beneficio_trimestral / 3),
+                   Decil = factor(Decil, levels = c("I","II","III","IV","V","VI","VII","VIII","IX","X")))
+
+# Valor de la media nacional
+media_beneficios <- 2500/3
+
+# Paleta de colores
+colores_deciles <- brewer.pal(10, "Set3")
+
+# Gráfico
+ggplot(beneficios_df, aes(x = Decil, y = Beneficio_mensual, fill = Decil)) +
+    geom_col(width = 0.7) +
+    geom_text(
+        aes(label = comma(Beneficio_mensual, accuracy = 1)),
+        vjust = -0.5, size = 3
+    ) +
+    geom_hline(yintercept = media_beneficios, linetype = "dashed", color = "red", size = 1) +
+    annotate("text", x = 1.5, y = media_beneficios + 100,
+             label = paste0("Media nacional: $", comma(media_beneficios)),
+             color = "red", hjust = 0, size = 3.5) +
+    scale_fill_manual(values = colores_deciles) +
+    scale_y_continuous(labels = comma_format(prefix = "$")) +
+    labs(
+        title = "Los Hogares con más ingreso son los que más beneficios sociales reciben",
+        subtitle = "Beneficios mensuales por programas gubernamentales (ENIGH 2024)",
+        x = NULL, y = "$ Beneficio mensual",
+        caption = "Fuente: INEGI. ENIGH 2024 | Elaboración propia @Luis_MartinezRz"
+    ) +
+    theme_stata() +
+    theme(
+        legend.position = "none",
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 11),
+        plot.caption = element_text(size = 9, color = "gray40"),
+        axis.text = element_text(size = 10)
+    )
+
+
