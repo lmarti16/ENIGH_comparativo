@@ -6,7 +6,7 @@ library(data.table)
 library(reldist)
 
 # Leer la base de datos desde archivo CSV
-archivo <- "D:/Descargas/conjunto_de_datos_enigh_ns_2022_csv/conjunto_de_datos_concentradohogar_enigh2022_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh2022_ns.csv"
+archivo <- "D:\\Descargas\\conjunto_de_datos_enigh2024_ns_csv\\conjunto_de_datos_concentradohogar_enigh2024_ns\\diccionario_de_datos\\diccionario_datos_concentradohogar_enigh2024_ns.csv"
 hogares <- fread(archivo)
 
 # Selecciona las variables de interés
