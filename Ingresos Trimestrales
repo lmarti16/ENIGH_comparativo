@@ -1,0 +1,67 @@
+# 1. Cargar ingresos y población (igual que antes)
+ingresos <- fread("D:/Descargas/conjunto_de_datos_enigh2024_ns_csv/conjunto_de_datos_ingresos_enigh2024_ns/conjunto_de_datos/conjunto_de_datos_ingresos_enigh2024_ns.csv")
+poblacion <- fread("D:/Descargas/conjunto_de_datos_enigh2024_ns_csv/conjunto_de_datos_poblacion_enigh2024_ns/conjunto_de_datos/conjunto_de_datos_poblacion_enigh2024_ns.csv")
+
+# 2. Sumar ingreso por persona
+ingresos_sum <- ingresos %>%
+    group_by(folioviv, foliohog, numren) %>%
+    summarise(ingreso_monetario_tri = sum(ing_tri, na.rm = TRUE), .groups = "drop")
+
+# 3. Unir con datos de población
+datos_combinados <- ingresos_sum %>%
+    left_join(
+        poblacion %>% select(folioviv, foliohog, numren, edad, sexo, factor),
+        by = c("folioviv", "foliohog", "numren")
+    ) %>%
+    filter(!is.na(edad), !is.na(sexo), edad >= 12)  # Solo personas de 12+
+
+# 4. Agrupar por rangos ENIGH
+datos_combinados <- datos_combinados %>%
+    mutate(
+        grupo_edad = case_when(
+            edad >= 12 & edad <= 19 ~ "12-19 AÑOS",
+            edad >= 20 & edad <= 29 ~ "20-29 AÑOS",
+            edad >= 30 & edad <= 39 ~ "30-39 AÑOS",
+            edad >= 40 & edad <= 49 ~ "40-49 AÑOS",
+            edad >= 50 & edad <= 59 ~ "50-59 AÑOS",
+            edad >= 60              ~ "60 Y MÁS AÑOS"
+        ),
+        sexo_label = case_when(
+            sexo == 1 ~ "HOMBRES",
+            sexo == 2 ~ "MUJERES",
+            TRUE ~ "Otro"
+        )
+    )
+
+# 5. Calcular ingreso promedio ponderado
+resultado <- datos_combinados %>%
+    group_by(grupo_edad, sexo_label) %>%
+    summarise(
+        ingreso_prom_trimestral = weighted.mean(ingreso_monetario_tri, factor, na.rm = TRUE),
+        .groups = "drop"
+    )
+
+# 6. Agregar TOTAL por sexo y grupo
+total <- datos_combinados %>%
+    mutate(grupo_edad = "TOTAL") %>%
+    group_by(grupo_edad, sexo_label) %>%
+    summarise(ingreso_prom_trimestral = weighted.mean(ingreso_monetario_tri, factor, na.rm = TRUE), .groups = "drop")
+
+# 7. Unir y reordenar
+final <- bind_rows(resultado, total) %>%
+    mutate(
+        grupo_edad = factor(grupo_edad, levels = c("TOTAL", "12-19 AÑOS", "20-29 AÑOS", "30-39 AÑOS", "40-49 AÑOS", "50-59 AÑOS", "60 Y MÁS AÑOS")),
+        ingreso_prom_trimestral = round(ingreso_prom_trimestral, 0)
+    ) %>%
+    arrange(grupo_edad, sexo_label)
+
+# 8. Convertir a formato ancho
+tabla_final <- final %>%
+    tidyr::pivot_wider(names_from = sexo_label, values_from = ingreso_prom_trimestral) %>%
+    mutate(
+        TOTAL = round(rowMeans(select(., HOMBRES, MUJERES), na.rm = TRUE), 0)
+    ) %>%
+    select(`GRUPOS DE EDAD` = grupo_edad, TOTAL, HOMBRES, MUJERES)
+
+# Mostrar tabla
+print(tabla_final)
